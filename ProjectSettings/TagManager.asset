@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Terra
+  - Escales
+  - Jugador1
+  - Jugador2
+  - Objecte
   layers:
   - Default
   - TransparentFX
@@ -11,8 +16,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Frontal
+  - Escales
   - 
   - 
   - 
@@ -40,4 +45,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Fons
+    uniqueID: 3126162131
+    locked: 0
+  - name: Frontal
+    uniqueID: 1069808487
+    locked: 0
+  - name: Escales
+    uniqueID: 1511290585
+    locked: 0
+  - name: Objectes
+    uniqueID: 3589503643
     locked: 0
