@@ -4,30 +4,119 @@ using UnityEngine;
 
 public class MovimentsJugadors : MonoBehaviour
 {
-    public float speed = 5f; // Velocidad de movimiento
-    public float jumpForce = 7f; // Fuerza del salto
-    public float climbSpeed = 4f; // Velocidad al subir escaleras
-
     private Rigidbody2D rb;
-    private bool isGrounded = true;
-    private bool onLadder = false;
 
-    // Límites de la pantalla
-    private float minX, maxX, minY, maxY;
+    [Header("Moviment Horizontal Jugador")]
+    private float movimentHorizontal = 0f;
+    [SerializeField] private float velocitatMoviment;
+    [Range(0f, 0.3f)] [SerializeField] private float suavitzat;
 
-    // Teclas para cada jugador
+    private Vector3 velocitat = Vector3.zero;
+    private bool miraDreta = true;
+
+    [Header("Salt Jugador")]
+    [SerializeField] private float forcaSalt;
+    [SerializeField] private LayerMask queEsTerra;
+    [SerializeField] private Transform controladorTerra;
+    [SerializeField] private Vector3 midaCaixaControlador;
+    [SerializeField] private bool estaAterra;
+    private bool salt = false;
+
+    [Header("Ajupit")]
+    private bool ajupit = false;
+
+    [Header("Escales")]
+    private float movimentVertical = 0f;
+    private bool escales = false;
+    [SerializeField] private float velocitatEscales;
+
+
+    [Header("Tecles")]
     private KeyCode leftKey;
     private KeyCode rightKey;
     private KeyCode upKey;
     private KeyCode downKey;
 
-    private float halfWidth;
-    private float halfHeight;
+    [Header("Limits pantalla")]
+    private float minX, maxX, minY, maxY;
+
+    [Header("Animacions")]
+    private Animator animator;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        assignarTecles();
+        calcularLimitsPantalla();
+    }
 
+    void Update()
+    {
+        //Moviment horitzontal
+        if (Input.GetKey(leftKey))
+            movimentHorizontal = -velocitatMoviment;
+        else if (Input.GetKey(rightKey))
+            movimentHorizontal = velocitatMoviment;
+        else
+            movimentHorizontal = 0f; 
+        
+        animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
+
+        animator.SetFloat("VelocitatY", rb.velocity.y);
+
+        // Engancharse a la escalera si está en contacto y pulsa up
+        if (escales && (Input.GetKeyDown(upKey) || Input.GetKeyDown(downKey)))
+        {
+            rb.gravityScale = 0f;
+            rb.velocity = Vector2.zero;   
+        }
+
+        // Movimiento vertical en escalera solo si está enganchado (sin gravedad)
+        if (escales && rb.gravityScale == 0f)
+        {
+            if (Input.GetKey(upKey)) {
+                movimentVertical = velocitatEscales;
+            }
+            else if (Input.GetKey(downKey))
+                movimentVertical = -velocitatEscales;
+            else
+                movimentVertical = 0f;
+        }
+        
+
+        // Salt
+        if (Input.GetKeyDown(upKey))
+        {
+            salt = true;
+        } 
+
+        // Ajupit
+        ajupit = Input.GetKey(downKey);
+    }
+
+    private void FixedUpdate()
+    {
+        estaAterra = Physics2D.OverlapBox(controladorTerra.position, midaCaixaControlador, 0f, queEsTerra);
+        animator.SetBool("estaAterra", estaAterra);
+        animator.SetBool("estaAjupit", ajupit);
+        animator.SetBool("estaEscales", escales && rb.gravityScale == 0f);
+        //Moure el jugador
+        if (escales && rb.gravityScale == 0f)
+        {
+            // Movimiento vertical y horizontal en escalera
+            rb.velocity = new Vector2(movimentHorizontal * Time.fixedDeltaTime, movimentVertical);
+        }
+        else
+        {
+            // Movimiento normal fuera de escalera
+            MoureJugador(movimentHorizontal * Time.fixedDeltaTime, salt);
+        }
+            salt = false;
+        
+    }
+
+    private void assignarTecles() {
         // Asignar teclas según el tag
         if (CompareTag("Jugador1"))
         {
@@ -43,99 +132,52 @@ public class MovimentsJugadors : MonoBehaviour
             upKey = KeyCode.I;
             downKey = KeyCode.K;
         }
+    }
 
-        // Calcular límites de la pantalla usando la cámara principal
-        Camera cam = Camera.main;
-        Vector2 bottomLeft = cam.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 topRight = cam.ViewportToWorldPoint(new Vector2(1, 1));
+    private void calcularLimitsPantalla()
+    {
+        Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
+        Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
         minX = bottomLeft.x;
         minY = bottomLeft.y;
         maxX = topRight.x;
         maxY = topRight.y;
-
-        // Calcular la mitad del tamaño del personaje (Collider2D)
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
-        {
-            halfWidth = col.bounds.extents.x + 0.1f; // Añadir un pequeño margen
-            halfHeight = col.bounds.extents.y + 0.1f; // Añadir un pequeño margen
-        }
-        else
-        {
-            halfWidth = 0.5f;
-            halfHeight = 0.5f;
-        }
     }
 
-    void Update()
+    private void MoureJugador(float moure, bool saltar)
     {
-        float moveX = 0f;
-        float moveY = rb.velocity.y;
-
-        // Movimiento horizontal
-        if (Input.GetKey(leftKey))
-            moveX = -1f;
-        if (Input.GetKey(rightKey))
-            moveX = 1f;
-
-        // Movimiento en escalera
-        if (onLadder)
+        Vector3 velocitatObjectiu = new Vector2(moure, rb.velocity.y);
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, velocitatObjectiu, ref velocitat, suavitzat);
+        
+        if (moure > 0 && !miraDreta)
         {
-            rb.gravityScale = 0f;
-            moveY = 0f;
-            if (Input.GetKey(upKey))
-                moveY = climbSpeed;
-            else if (Input.GetKey(downKey))
-                moveY = -climbSpeed;
-            else
-                moveY = 0f;
-
-            rb.velocity = new Vector2(moveX * speed, moveY);
+            Girar();
         }
-        else
+        else if (moure < 0 && miraDreta)
         {
-            rb.gravityScale = 1f;
-            // Salto (permite mantener presionada la tecla)
-            if (Input.GetKey(upKey) && isGrounded)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                isGrounded = false;
-            }
-            else
-            {
-                rb.velocity = new Vector2(moveX * speed, rb.velocity.y);
-            }
+            Girar();
         }
 
-        // Limitar la posición del jugador a los límites de la pantalla con margen del tamaño del personaje
-        Vector3 clampedPosition = transform.position;
-        clampedPosition.x = Mathf.Clamp(clampedPosition.x, minX + halfWidth, maxX - halfWidth);
-        clampedPosition.y = Mathf.Clamp(clampedPosition.y, minY + halfHeight, maxY - halfHeight);
-
-        // Si toca el límite superior, anula la velocidad vertical positiva para evitar que "flote"
-        if (clampedPosition.y >= maxY - halfHeight && rb.velocity.y > 0)
+        if (estaAterra && saltar && rb.gravityScale == 1f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0f);
+            estaAterra = false;
+            rb.AddForce(new Vector2(0f, forcaSalt));
         }
-
-        transform.position = clampedPosition;
     }
-
-    // Detectar si está en el suelo con cualquier objeto excepto escaleras
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void Girar()
     {
-        if (!collision.gameObject.CompareTag("Escales") && collision.contacts[0].normal.y > 0.5f)
-        {
-            isGrounded = true;
-        }
+        miraDreta = !miraDreta;
+        Vector3 escala = transform.localScale;
+        escala.x *= -1;
+        transform.localScale = escala;
     }
 
-    // Detectar si está en la escalera
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Escales"))
         {
-            onLadder = true;
+            escales = true;
         }
     }
 
@@ -143,8 +185,15 @@ public class MovimentsJugadors : MonoBehaviour
     {
         if (other.CompareTag("Escales"))
         {
-            onLadder = false;
+            escales = false;
             rb.gravityScale = 1f;
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(controladorTerra.position, midaCaixaControlador);
+    }
+
 }
