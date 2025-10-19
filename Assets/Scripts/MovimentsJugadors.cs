@@ -29,13 +29,14 @@ public class MovimentsJugadors : MonoBehaviour
     private float movimentVertical = 0f;
     private bool escales = false;
     [SerializeField] private float velocitatEscales;
-
+    [SerializeField] private Transform centroEscalera;
 
     [Header("Tecles")]
     private KeyCode leftKey;
     private KeyCode rightKey;
     private KeyCode upKey;
     private KeyCode downKey;
+    private KeyCode specialKey;
 
     [Header("Limits pantalla")]
     private float minX, maxX, minY, maxY;
@@ -54,22 +55,41 @@ public class MovimentsJugadors : MonoBehaviour
     void Update()
     {
         //Moviment horitzontal
-        if (Input.GetKey(leftKey))
-            movimentHorizontal = -velocitatMoviment;
-        else if (Input.GetKey(rightKey))
-            movimentHorizontal = velocitatMoviment;
-        else
-            movimentHorizontal = 0f; 
+        if (escales && rb.gravityScale == 0f)
+        {
+            // Si está en la escalera y enganchado, no puede moverse derecha/izquierda
+            movimentHorizontal = 0f;
+            // Si pulsa izquierda o derecha, se desengancha de la escalera
+            if (Input.GetKeyDown(leftKey) || Input.GetKeyDown(rightKey))
+            {
+                rb.gravityScale = 1f;
+            }
+        }
+        else {
+            if (Input.GetKey(leftKey))
+                movimentHorizontal = -velocitatMoviment;
+            else if (Input.GetKey(rightKey))
+                movimentHorizontal = velocitatMoviment;
+            else
+                movimentHorizontal = 0f; 
+        }
         
         animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
 
         animator.SetFloat("VelocitatY", rb.velocity.y);
 
-        // Engancharse a la escalera si está en contacto y pulsa up
+        // Engancharse a la escalera si está en contacto y pulsa up o down
         if (escales && (Input.GetKeyDown(upKey) || Input.GetKeyDown(downKey)))
         {
             rb.gravityScale = 0f;
             rb.velocity = Vector2.zero;   
+
+            // Centrar al jugador en la escalera
+            if (centroEscalera != null) {
+                Vector3 pos = transform.position;
+                pos.x = centroEscalera.position.x;
+                transform.position = pos;
+            }
         }
 
         // Movimiento vertical en escalera solo si está enganchado (sin gravedad)
@@ -124,6 +144,7 @@ public class MovimentsJugadors : MonoBehaviour
             rightKey = KeyCode.D;
             upKey = KeyCode.W;
             downKey = KeyCode.S;
+            specialKey = KeyCode.E;
         }
         else if (CompareTag("Jugador2"))
         {
@@ -131,6 +152,7 @@ public class MovimentsJugadors : MonoBehaviour
             rightKey = KeyCode.L;
             upKey = KeyCode.I;
             downKey = KeyCode.K;
+            specialKey = KeyCode.O;
         }
     }
 
@@ -178,6 +200,7 @@ public class MovimentsJugadors : MonoBehaviour
         if (other.CompareTag("Escales"))
         {
             escales = true;
+            centroEscalera = other.transform.Find("CentreEscales");
         }
     }
 
@@ -187,6 +210,7 @@ public class MovimentsJugadors : MonoBehaviour
         {
             escales = false;
             rb.gravityScale = 1f;
+            centroEscalera = null;
         }
     }
 

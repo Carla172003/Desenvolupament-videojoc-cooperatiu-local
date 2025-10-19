@@ -9,6 +9,7 @@ TagManager:
   - Jugador1
   - Jugador2
   - Objecte
+  - TerraInvisible
   layers:
   - Default
   - TransparentFX
@@ -48,6 +49,12 @@ TagManager:
     locked: 0
   - name: Fons
     uniqueID: 3126162131
+    locked: 0
+  - name: SiluetesEscenari
+    uniqueID: 228894293
+    locked: 0
+  - name: Telons
+    uniqueID: 561255457
     locked: 0
   - name: Frontal
     uniqueID: 1069808487
