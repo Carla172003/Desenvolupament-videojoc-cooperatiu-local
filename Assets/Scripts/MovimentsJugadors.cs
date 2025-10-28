@@ -20,6 +20,7 @@ public class MovimentsJugadors : MonoBehaviour
     [SerializeField] private Transform controladorTerra;
     [SerializeField] private Vector3 midaCaixaControlador;
     [SerializeField] private bool estaAterra;
+    private float gravetat = 1.5f;
     private bool salt = false;
 
     [Header("Ajupit")]
@@ -48,96 +49,60 @@ public class MovimentsJugadors : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        rb.gravityScale = gravetat;
         assignarTecles();
         calcularLimitsPantalla();
     }
 
     void Update()
     {
-        //Moviment horitzontal
-        if (escales && rb.gravityScale == 0f)
-        {
-            // Si está en la escalera y enganchado, no puede moverse derecha/izquierda
-            movimentHorizontal = 0f;
-            // Si pulsa izquierda o derecha, se desengancha de la escalera
-            if (Input.GetKeyDown(leftKey) || Input.GetKeyDown(rightKey))
-            {
-                rb.gravityScale = 1f;
-            }
-        }
-        else {
-            if (Input.GetKey(leftKey))
-                movimentHorizontal = -velocitatMoviment;
-            else if (Input.GetKey(rightKey))
-                movimentHorizontal = velocitatMoviment;
-            else
-                movimentHorizontal = 0f; 
-        }
+        // Moviment horitzontal
+        processarInputHoritzontal();
+
+        // Moviment escales
+        processarInputEscales();
         
-        animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
-
-        animator.SetFloat("VelocitatY", rb.velocity.y);
-
-        // Engancharse a la escalera si está en contacto y pulsa up o down
-        if (escales && (Input.GetKeyDown(upKey) || Input.GetKeyDown(downKey)))
-        {
-            rb.gravityScale = 0f;
-            rb.velocity = Vector2.zero;   
-
-            // Centrar al jugador en la escalera
-            if (centroEscalera != null) {
-                Vector3 pos = transform.position;
-                pos.x = centroEscalera.position.x;
-                transform.position = pos;
-            }
-        }
-
-        // Movimiento vertical en escalera solo si está enganchado (sin gravedad)
-        if (escales && rb.gravityScale == 0f)
-        {
-            if (Input.GetKey(upKey)) {
-                movimentVertical = velocitatEscales;
-            }
-            else if (Input.GetKey(downKey))
-                movimentVertical = -velocitatEscales;
-            else
-                movimentVertical = 0f;
-        }
-        
-
         // Salt
         if (Input.GetKeyDown(upKey))
-        {
             salt = true;
-        } 
 
         // Ajupit
         ajupit = Input.GetKey(downKey);
+
+        // Animacions
+        animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
+        animator.SetFloat("VelocitatY", rb.velocity.y);
     }
 
     private void FixedUpdate()
     {
+        // Comprovar si està a terra
         estaAterra = Physics2D.OverlapBox(controladorTerra.position, midaCaixaControlador, 0f, queEsTerra);
+
+        // Actualitzar estats animacions
         animator.SetBool("estaAterra", estaAterra);
         animator.SetBool("estaAjupit", ajupit);
         animator.SetBool("estaEscales", escales && rb.gravityScale == 0f);
-        //Moure el jugador
+
+        // Aplicar moviment
         if (escales && rb.gravityScale == 0f)
         {
-            // Movimiento vertical y horizontal en escalera
+            // Moviment vertical a escales
             rb.velocity = new Vector2(movimentHorizontal * Time.fixedDeltaTime, movimentVertical);
         }
         else
         {
-            // Movimiento normal fuera de escalera
-            MoureJugador(movimentHorizontal * Time.fixedDeltaTime, salt);
+            // Moviment horitzontal i salt
+            executarMoviment(movimentHorizontal * Time.fixedDeltaTime, salt);
         }
-            salt = false;
+        
+        salt = false;
         
     }
 
-    private void assignarTecles() {
-        // Asignar teclas según el tag
+    private void assignarTecles() 
+    {
+        // Asignar tecles segons el tag
         if (CompareTag("Jugador1"))
         {
             leftKey = KeyCode.A;
@@ -167,11 +132,65 @@ public class MovimentsJugadors : MonoBehaviour
         maxY = topRight.y;
     }
 
-    private void MoureJugador(float moure, bool saltar)
+    private void processarInputHoritzontal() {
+        // Si està a l'escala i enganxat, no pot moure's dreta/esquerra
+        if (escales && rb.gravityScale == 0f)
+        {
+            movimentHorizontal = 0f;
+
+            // Si prem esquerra o dreta, es desenganxa de l'escala
+            if (Input.GetKeyDown(leftKey) || Input.GetKeyDown(rightKey))
+            {
+                rb.gravityScale = gravetat;
+            }
+        }
+        // Moviment horitzontal fora de l'escala
+        else {
+            if (Input.GetKey(leftKey))
+                movimentHorizontal = -velocitatMoviment;
+            else if (Input.GetKey(rightKey))
+                movimentHorizontal = velocitatMoviment;
+            else
+                movimentHorizontal = 0f; 
+        }
+    }
+
+    private void processarInputEscales()
     {
+        // Enganxar-se a l'escala si està en contacte i prem up o down
+        if (escales && (Input.GetKeyDown(upKey) || Input.GetKeyDown(downKey)))
+        {
+            rb.gravityScale = 0f;
+            rb.velocity = Vector2.zero;   
+
+            // Centrar al jugador en la escalera
+            if (centroEscalera != null) {
+                Vector3 pos = transform.position;
+                pos.x = centroEscalera.position.x;
+                transform.position = pos;
+            }
+        }
+
+        // Moviment vertical a l'escala només si està enganxat
+        if (escales && rb.gravityScale == 0f)
+        {
+            if (Input.GetKey(upKey)) {
+                movimentVertical = velocitatEscales;
+            }
+            else if (Input.GetKey(downKey))
+                movimentVertical = -velocitatEscales;
+            else
+                movimentVertical = 0f;
+        }
+    }
+
+    private void executarMoviment(float moure, bool saltar)
+    {
+        // Suavitzar el moviment
         Vector3 velocitatObjectiu = new Vector2(moure, rb.velocity.y);
         rb.velocity = Vector3.SmoothDamp(rb.velocity, velocitatObjectiu, ref velocitat, suavitzat);
         
+        // Girar el jugador segons la direcció
         if (moure > 0 && !miraDreta)
         {
             Girar();
@@ -181,14 +200,17 @@ public class MovimentsJugadors : MonoBehaviour
             Girar();
         }
 
-        if (estaAterra && saltar && rb.gravityScale == 1f)
+        // Saltar
+        if (estaAterra && saltar && rb.gravityScale != 0f)
         {
             estaAterra = false;
             rb.AddForce(new Vector2(0f, forcaSalt));
         }
     }
+
     private void Girar()
     {
+        // Girar el jugador
         miraDreta = !miraDreta;
         Vector3 escala = transform.localScale;
         escala.x *= -1;
@@ -197,6 +219,7 @@ public class MovimentsJugadors : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Si el jugador entra en contacte amb una escala
         if (other.CompareTag("Escales"))
         {
             escales = true;
@@ -206,16 +229,18 @@ public class MovimentsJugadors : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        // Si el jugador surt de l'escala
         if (other.CompareTag("Escales"))
         {
             escales = false;
-            rb.gravityScale = 1f;
+            rb.gravityScale = gravetat;
             centroEscalera = null;
         }
     }
 
     private void OnDrawGizmos()
     {
+        // Dibuixar el controlador de terra
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(controladorTerra.position, midaCaixaControlador);
     }

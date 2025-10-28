@@ -7,14 +7,19 @@ public class AgafarObjecte : MonoBehaviour
 
     public GameObject puntAgafar;
     private GameObject objecteAgafat;
-    
+    private KeyCode specialKey;
 
+    void Start()
+    {
+        assignarTecles();
+    }
+    
     // Update is called once per frame
     void Update()
     {
         if (objecteAgafat != null)
         {
-            if (Input.GetKey("r"))
+            if (Input.GetKey(specialKey))
             {
                 objecteAgafat.GetComponent<Rigidbody2D>().gravityScale = 1;
                 objecteAgafat.GetComponent<Rigidbody2D>().isKinematic = false;
@@ -22,14 +27,13 @@ public class AgafarObjecte : MonoBehaviour
                 objecteAgafat = null;
             }
         }
-        
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Objecte"))
         {
-            if (Input.GetKey("e") && objecteAgafat == null)
+            if (Input.GetKey(specialKey) && objecteAgafat == null)
             {
                 other.GetComponent<Rigidbody2D>().gravityScale = 0;
                 other.GetComponent<Rigidbody2D>().isKinematic = true;
@@ -38,6 +42,19 @@ public class AgafarObjecte : MonoBehaviour
                 objecteAgafat = other.gameObject;
             }
             
+        }
+    }
+
+    private void assignarTecles() 
+    {
+        // Asignar tecles segons el tag
+        if (CompareTag("Ma1"))
+        {
+            specialKey = KeyCode.E;
+        }
+        else if (CompareTag("Ma2"))
+        {
+            specialKey = KeyCode.O;
         }
     }
 }
