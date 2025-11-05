@@ -4,57 +4,105 @@ using UnityEngine;
 
 public class AgafarObjecte : MonoBehaviour
 {
-
-    public GameObject puntAgafar;
+    public GameObject puntAgafar; // Mano o punto donde se sujeta
+    public float separacioDelSol = 0.05f; // Pequeña separación del suelo
+    public float offsetHoritzontal = 0f;  // Si quieres moverlo un poco a los lados
     private GameObject objecteAgafat;
     private KeyCode specialKey;
+    private Animator animator;
+    [SerializeField] private bool teObjecte;
+    private GameObject objecteProper;
 
     void Start()
     {
-        assignarTecles();
+        AssignarTecles();
+        animator = GetComponentInParent<Animator>();
     }
-    
-    // Update is called once per frame
+
     void Update()
     {
-        if (objecteAgafat != null)
+        if (Input.GetKeyDown(specialKey))
         {
-            if (Input.GetKey(specialKey))
-            {
-                objecteAgafat.GetComponent<Rigidbody2D>().gravityScale = 1;
-                objecteAgafat.GetComponent<Rigidbody2D>().isKinematic = false;
-                objecteAgafat.gameObject.transform.SetParent(null);
-                objecteAgafat = null;
-            }
+            if (teObjecte)
+                DeixarObjecte();
+            else if (objecteProper != null)
+                Agafar(objecteProper);
         }
+
+        // Mantener el objeto a ras de suelo si lo estamos sujetando
+        if (teObjecte && objecteAgafat != null)
+        {
+            PosicionarARasDeSol(objecteAgafat);
+        }
+
+        animator.SetBool("teObjecte", teObjecte);
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Objecte"))
-        {
-            if (Input.GetKey(specialKey) && objecteAgafat == null)
-            {
-                other.GetComponent<Rigidbody2D>().gravityScale = 0;
-                other.GetComponent<Rigidbody2D>().isKinematic = true;
-                other.gameObject.transform.position = puntAgafar.transform.position;
-                other.gameObject.transform.SetParent(puntAgafar.gameObject.transform);
-                objecteAgafat = other.gameObject;
-            }
-            
-        }
+        if (other.CompareTag("Objecte"))
+            objecteProper = other.gameObject;
     }
 
-    private void assignarTecles() 
+    private void OnTriggerExit2D(Collider2D other)
     {
-        // Asignar tecles segons el tag
+        if (other.CompareTag("Objecte") && objecteProper == other.gameObject)
+            objecteProper = null;
+    }
+
+    private void Agafar(GameObject obj)
+    {
+        Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0;
+        rb.isKinematic = true;
+
+        obj.transform.SetParent(puntAgafar.transform);
+        PosicionarARasDeSol(obj);
+
+        objecteAgafat = obj;
+        teObjecte = true;
+    }
+
+    private void DeixarObjecte()
+    {
+        if (objecteAgafat == null) return;
+
+        Rigidbody2D rb = objecteAgafat.GetComponent<Rigidbody2D>();
+        rb.gravityScale = 1;
+        rb.isKinematic = false;
+
+        objecteAgafat.transform.SetParent(null);
+        objecteAgafat = null;
+        teObjecte = false;
+    }
+
+    private void PosicionarARasDeSol(GameObject obj)
+    {
+        Collider2D col = obj.GetComponent<Collider2D>();
+        if (col == null) return;
+
+        // Altura del collider
+        float altura = col.bounds.size.y;
+
+        // Y actual del borde inferior del objeto
+        float yBaseActual = col.bounds.min.y;
+
+        // Diferencia que hay entre donde está su base y donde debería estar
+        float diferencia = puntAgafar.transform.position.y - yBaseActual;
+
+        // Mueve el objeto entero esa diferencia hacia arriba o abajo
+        obj.transform.position += new Vector3(0, diferencia + separacioDelSol, 0);
+    }
+
+
+
+
+
+    private void AssignarTecles()
+    {
         if (CompareTag("Ma1"))
-        {
             specialKey = KeyCode.E;
-        }
         else if (CompareTag("Ma2"))
-        {
             specialKey = KeyCode.O;
-        }
     }
 }

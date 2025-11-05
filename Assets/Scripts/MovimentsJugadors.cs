@@ -30,14 +30,13 @@ public class MovimentsJugadors : MonoBehaviour
     private float movimentVertical = 0f;
     private bool escales = false;
     [SerializeField] private float velocitatEscales;
-    [SerializeField] private Transform centroEscalera;
+    [SerializeField] private Transform centreEscales;
 
     [Header("Tecles")]
     private KeyCode leftKey;
     private KeyCode rightKey;
     private KeyCode upKey;
     private KeyCode downKey;
-    private KeyCode specialKey;
 
     [Header("Limits pantalla")]
     private float minX, maxX, minY, maxY;
@@ -109,7 +108,6 @@ public class MovimentsJugadors : MonoBehaviour
             rightKey = KeyCode.D;
             upKey = KeyCode.W;
             downKey = KeyCode.S;
-            specialKey = KeyCode.E;
         }
         else if (CompareTag("Jugador2"))
         {
@@ -117,7 +115,6 @@ public class MovimentsJugadors : MonoBehaviour
             rightKey = KeyCode.L;
             upKey = KeyCode.I;
             downKey = KeyCode.K;
-            specialKey = KeyCode.O;
         }
     }
 
@@ -164,9 +161,9 @@ public class MovimentsJugadors : MonoBehaviour
             rb.velocity = Vector2.zero;   
 
             // Centrar al jugador en la escalera
-            if (centroEscalera != null) {
+            if (centreEscales != null) {
                 Vector3 pos = transform.position;
-                pos.x = centroEscalera.position.x;
+                pos.x = centreEscales.position.x;
                 transform.position = pos;
             }
         }
@@ -223,7 +220,7 @@ public class MovimentsJugadors : MonoBehaviour
         if (other.CompareTag("Escales"))
         {
             escales = true;
-            centroEscalera = other.transform.Find("CentreEscales");
+            centreEscales = other.transform.Find("CentreEscales");
         }
     }
 
@@ -234,7 +231,7 @@ public class MovimentsJugadors : MonoBehaviour
         {
             escales = false;
             rb.gravityScale = gravetat;
-            centroEscalera = null;
+            centreEscales = null;
         }
     }
 
