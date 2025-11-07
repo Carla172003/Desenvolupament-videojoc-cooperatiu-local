@@ -23,8 +23,6 @@ public class MovimentsJugadors : MonoBehaviour
     private float gravetat = 1.5f;
     private bool salt = false;
 
-    [Header("Ajupit")]
-    private bool ajupit = false;
 
     [Header("Escales")]
     private float movimentVertical = 0f;
@@ -65,9 +63,6 @@ public class MovimentsJugadors : MonoBehaviour
         if (Input.GetKeyDown(upKey))
             salt = true;
 
-        // Ajupit
-        ajupit = Input.GetKey(downKey);
-
         // Animacions
         animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
         animator.SetFloat("VelocitatY", rb.velocity.y);
@@ -80,7 +75,6 @@ public class MovimentsJugadors : MonoBehaviour
 
         // Actualitzar estats animacions
         animator.SetBool("estaAterra", estaAterra);
-        animator.SetBool("estaAjupit", ajupit);
         animator.SetBool("estaEscales", escales && rb.gravityScale == 0f);
 
         // Aplicar moviment

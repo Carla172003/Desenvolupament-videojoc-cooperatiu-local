@@ -72,6 +72,13 @@ public class AgafarObjecte : MonoBehaviour
         rb.isKinematic = false;
 
         objecteAgafat.transform.SetParent(null);
+
+        ObjecteColocable colocable = objecteAgafat.GetComponent<ObjecteColocable>();
+        if (colocable != null)
+        {
+            colocable.IntentarColocar();
+        }
+
         objecteAgafat = null;
         teObjecte = false;
     }
@@ -93,10 +100,6 @@ public class AgafarObjecte : MonoBehaviour
         // Mueve el objeto entero esa diferencia hacia arriba o abajo
         obj.transform.position += new Vector3(0, diferencia + separacioDelSol, 0);
     }
-
-
-
-
 
     private void AssignarTecles()
     {
