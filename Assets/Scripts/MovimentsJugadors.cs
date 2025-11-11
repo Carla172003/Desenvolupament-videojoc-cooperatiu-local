@@ -6,6 +6,8 @@ public class MovimentsJugadors : MonoBehaviour
 {
     private Rigidbody2D rb;
 
+    [SerializeField] private bool socJugador1;
+
     [Header("Moviment Horizontal Jugador")]
     private float movimentHorizontal = 0f;
     [SerializeField] private float velocitatMoviment;
@@ -23,9 +25,6 @@ public class MovimentsJugadors : MonoBehaviour
     private float gravetat = 1.5f;
     private bool salt = false;
 
-    [Header("Ajupit")]
-    private bool ajupit = false;
-
     [Header("Escales")]
     private float movimentVertical = 0f;
     private bool escales = false;
@@ -38,8 +37,8 @@ public class MovimentsJugadors : MonoBehaviour
     private KeyCode upKey;
     private KeyCode downKey;
 
-    [Header("Limits pantalla")]
-    private float minX, maxX, minY, maxY;
+    [Header("Agafar Objectes")]
+    private AgafarObjecte agafarObjecte;
 
     [Header("Animacions")]
     private Animator animator;
@@ -49,8 +48,9 @@ public class MovimentsJugadors : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         rb.gravityScale = gravetat;
+        socJugador1 = CompareTag("Jugador1");
         assignarTecles();
-        calcularLimitsPantalla();
+        agafarObjecte = GetComponentInChildren<AgafarObjecte>();
     }
 
     void Update()
@@ -65,9 +65,6 @@ public class MovimentsJugadors : MonoBehaviour
         if (Input.GetKeyDown(upKey))
             salt = true;
 
-        // Ajupit
-        ajupit = Input.GetKey(downKey);
-
         // Animacions
         animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
         animator.SetFloat("VelocitatY", rb.velocity.y);
@@ -76,11 +73,10 @@ public class MovimentsJugadors : MonoBehaviour
     private void FixedUpdate()
     {
         // Comprovar si està a terra
-        estaAterra = Physics2D.OverlapBox(controladorTerra.position, midaCaixaControlador, 0f, queEsTerra);
+        comprovarEstaAterra();
 
         // Actualitzar estats animacions
         animator.SetBool("estaAterra", estaAterra);
-        animator.SetBool("estaAjupit", ajupit);
         animator.SetBool("estaEscales", escales && rb.gravityScale == 0f);
 
         // Aplicar moviment
@@ -102,31 +98,20 @@ public class MovimentsJugadors : MonoBehaviour
     private void assignarTecles() 
     {
         // Asignar tecles segons el tag
-        if (CompareTag("Jugador1"))
+        if (socJugador1)
         {
             leftKey = KeyCode.A;
             rightKey = KeyCode.D;
             upKey = KeyCode.W;
             downKey = KeyCode.S;
         }
-        else if (CompareTag("Jugador2"))
+        else 
         {
             leftKey = KeyCode.J;
             rightKey = KeyCode.L;
             upKey = KeyCode.I;
             downKey = KeyCode.K;
         }
-    }
-
-    private void calcularLimitsPantalla()
-    {
-        Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
-        Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
-        minX = bottomLeft.x;
-        minY = bottomLeft.y;
-        maxX = topRight.x;
-        maxY = topRight.y;
     }
 
     private void processarInputHoritzontal() {
@@ -154,7 +139,14 @@ public class MovimentsJugadors : MonoBehaviour
 
     private void processarInputEscales()
     {
-        // Enganxar-se a l'escala si està en contacte i prem up o down
+        // Si està agafant un objecte, no es pot enganxar a l'escala
+        if (agafarObjecte != null && agafarObjecte.teObjecte)
+        {
+            movimentVertical = 0f;
+            return; 
+        }
+
+            // Enganxar-se a l'escala si està en contacte i prem up o down
         if (escales && (Input.GetKeyDown(upKey) || Input.GetKeyDown(downKey)))
         {
             rb.gravityScale = 0f;
@@ -178,6 +170,27 @@ public class MovimentsJugadors : MonoBehaviour
                 movimentVertical = -velocitatEscales;
             else
                 movimentVertical = 0f;
+        }
+    }
+
+    private void comprovarEstaAterra()
+    {
+        Collider2D[] hits = Physics2D.OverlapBoxAll(controladorTerra.position, midaCaixaControlador, 0f);
+
+        estaAterra = false;
+
+        foreach (var hit in hits)
+        {
+            if (hit.gameObject == gameObject) continue; // Ignorarme a mí mismo
+
+            // Detecta suelo: objetos, tilemap o jugadores distintos
+            if (hit.CompareTag("Objecte") || hit.CompareTag("Terra") || 
+            (socJugador1 && hit.CompareTag("Jugador2")) || 
+            (!socJugador1 && hit.CompareTag("Jugador1")))
+            {
+                estaAterra = true;
+                break;
+            }
         }
     }
 
