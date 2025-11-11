@@ -3,19 +3,15 @@ using UnityEngine;
 
 public class ZonaObjectes : MonoBehaviour
 {
-    [Header("Objetos posibles (prefabs)")]
-    public List<GameObject> objectesPossibles;  // ⚠️ Cambiado a List para poder quitar elementos
+    [Header("Objectes possibles (prefabs)")]
+    public List<GameObject> objectesPossibles; 
 
-    [Header("Punto donde se instancian")]
+    [Header("Punt on es instancien")]
     public Transform puntSpawn;
 
     private bool jugadorProper = false;
-    private KeyCode specialKey = KeyCode.E;
+    private KeyCode specialKey = KeyCode.S;
 
-    private void Start()
-    {
-        AssignarTecles();
-    }
 
     void Update()
     {
@@ -29,21 +25,19 @@ public class ZonaObjectes : MonoBehaviour
     {
         if (objectesPossibles == null || objectesPossibles.Count == 0)
         {
-            Debug.Log("🎯 Ja s'han generat tots els objectes possibles!");
             return;
         }
 
         int index = Random.Range(0, objectesPossibles.Count);
         GameObject prefab = objectesPossibles[index];
 
-        // Crear el objeto
+        // Crear nou objecte al punt d'spawn
         GameObject nouObjecte = Instantiate(prefab, puntSpawn.position, Quaternion.identity);
         nouObjecte.name = prefab.name;
 
-        Debug.Log($"🧱 Objecte generat: {nouObjecte.name}");
 
-        // Asignar su punto correcto
-        ObjecteColocable objScript = nouObjecte.GetComponent<ObjecteColocable>();
+        // Assignar el punt correcte a l'objecte col·locable
+        ControladorObjecte objScript = nouObjecte.GetComponent<ControladorObjecte>();
         if (objScript != null)
         {
             PuntColocacio[] punts = FindObjectsOfType<PuntColocacio>();
@@ -52,15 +46,13 @@ public class ZonaObjectes : MonoBehaviour
                 if (punt.idCorrecte == objScript.idObjecte)
                 {
                     objScript.puntCorrecte = punt;
-                    Debug.Log($"🧩 Assignat punt correcte: {punt.name} a {objScript.idObjecte}");
                     break;
                 }
             }
         }
 
-        // 👇 Eliminar el prefab usado de la lista
+        // Eliminar prefab de la llista per no repetir
         objectesPossibles.RemoveAt(index);
-        Debug.Log($"📦 {prefab.name} eliminat de la llista. Queden {objectesPossibles.Count} objectes per generar.");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -68,7 +60,6 @@ public class ZonaObjectes : MonoBehaviour
         if (other.CompareTag("Jugador1") || other.CompareTag("Jugador2"))
         {
             jugadorProper = true;
-            Debug.Log("Jugador a prop del magatzem (pulsa E per generar objecte)");
         }
     }
 
@@ -78,13 +69,5 @@ public class ZonaObjectes : MonoBehaviour
         {
             jugadorProper = false;
         }
-    }
-
-    private void AssignarTecles()
-    {
-        if (CompareTag("Jugador1"))
-            specialKey = KeyCode.E;
-        else if (CompareTag("Jugador2"))
-            specialKey = KeyCode.O;
     }
 }

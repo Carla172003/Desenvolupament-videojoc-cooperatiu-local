@@ -1,11 +1,18 @@
 using UnityEngine;
 
-public class ObjecteColocable : MonoBehaviour
+public class ControladorObjecte : MonoBehaviour
 {
     public string idObjecte; // Identificador únic per a l'objecte
+    
+    [Header("Punt de Col·locació Correcte")]
     public PuntColocacio puntCorrecte;
     public float snapDistance = 1f;
     public bool colocat = false;
+
+    [Header("Opcions d'agafar")]
+    public bool necessitaDosJugadors = false;
+    [HideInInspector] public bool jugador1Preparat = false;
+    [HideInInspector] public bool jugador2Preparat = false;
 
     public void IntentarColocar()
     {
@@ -19,6 +26,7 @@ public class ObjecteColocable : MonoBehaviour
             // Col·loca l'objecte al punt correcte
             transform.position = puntCorrecte.transform.position;
             transform.rotation = puntCorrecte.transform.rotation;
+            transform.localScale = Vector3.one;
 
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             rb.velocity = Vector2.zero;

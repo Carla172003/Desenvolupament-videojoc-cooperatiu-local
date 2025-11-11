@@ -10,7 +10,7 @@ public class AgafarObjecte : MonoBehaviour
     private GameObject objecteAgafat;
     private KeyCode specialKey;
     private Animator animator;
-    [SerializeField] private bool teObjecte;
+    [SerializeField] public bool teObjecte;
     private GameObject objecteProper;
 
     void Start()
@@ -40,14 +40,16 @@ public class AgafarObjecte : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Objecte"))
-            objecteProper = other.gameObject;
+        if (!other.CompareTag("Objecte")) return;
+
+        objecteProper = other.gameObject;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Objecte") && objecteProper == other.gameObject)
-            objecteProper = null;
+        if (!other.CompareTag("Objecte")) return;
+
+        if (objecteProper == other.gameObject) objecteProper = null;
     }
 
     private void Agafar(GameObject obj)
@@ -73,7 +75,7 @@ public class AgafarObjecte : MonoBehaviour
 
         objecteAgafat.transform.SetParent(null);
 
-        ObjecteColocable colocable = objecteAgafat.GetComponent<ObjecteColocable>();
+        ControladorObjecte colocable = objecteAgafat.GetComponent<ControladorObjecte>();
         if (colocable != null)
         {
             colocable.IntentarColocar();
@@ -95,10 +97,10 @@ public class AgafarObjecte : MonoBehaviour
         float yBaseActual = col.bounds.min.y;
 
         // Diferencia que hay entre donde está su base y donde debería estar
-        float diferencia = puntAgafar.transform.position.y - yBaseActual;
+        float diferenciaY = puntAgafar.transform.position.y - yBaseActual;
 
         // Mueve el objeto entero esa diferencia hacia arriba o abajo
-        obj.transform.position += new Vector3(0, diferencia + separacioDelSol, 0);
+        obj.transform.position += new Vector3(0, diferenciaY + separacioDelSol, 0);
     }
 
     private void AssignarTecles()
