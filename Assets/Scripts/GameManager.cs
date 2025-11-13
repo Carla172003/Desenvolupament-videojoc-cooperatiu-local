@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,8 +10,6 @@ public class GameManager : MonoBehaviour
     private PuntColocacio[] puntsColocacio;
     private bool hasGuanyat = false;
     private bool hasPerdut = false;
-
-    public Victoria victoriaUI;
 
     [Header("Tiempo de juego (segundos)")]
     public float tempsMaxim = 120f; // 2 minutos por ejemplo
@@ -48,7 +47,7 @@ public class GameManager : MonoBehaviour
         {
             tempsRestant = 0;
             hasPerdut = true;
-            Debug.Log("Has perdut! S'ha acabat el temps!");
+            SceneManager.LoadScene("Derrota");
         }
 
     }
@@ -71,7 +70,7 @@ public class GameManager : MonoBehaviour
         if (totsColocats)
         {
             hasGuanyat = true;
-            victoriaUI.ActivarVictoria();
+            SceneManager.LoadScene("Victoria");
         }
     }
 }

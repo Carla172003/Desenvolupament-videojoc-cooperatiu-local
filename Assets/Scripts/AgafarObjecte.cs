@@ -54,6 +54,12 @@ public class AgafarObjecte : MonoBehaviour
 
     private void Agafar(GameObject obj)
     {
+        ControladorObjecte controlador = obj.GetComponent<ControladorObjecte>();
+        if (controlador != null && controlador.estaAgafat)
+        {
+            // Otro jugador ya lo tiene
+            return;
+        }
         Rigidbody2D rb = obj.GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         rb.isKinematic = true;
@@ -63,6 +69,9 @@ public class AgafarObjecte : MonoBehaviour
 
         objecteAgafat = obj;
         teObjecte = true;
+
+        if (controlador != null)
+            controlador.estaAgafat = true;
     }
 
     private void DeixarObjecte()
@@ -76,8 +85,10 @@ public class AgafarObjecte : MonoBehaviour
         objecteAgafat.transform.SetParent(null);
 
         ControladorObjecte colocable = objecteAgafat.GetComponent<ControladorObjecte>();
+
         if (colocable != null)
         {
+            colocable.estaAgafat = false;
             colocable.IntentarColocar();
         }
 

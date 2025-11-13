@@ -10,9 +10,8 @@ public class ControladorObjecte : MonoBehaviour
     public bool colocat = false;
 
     [Header("Opcions d'agafar")]
-    public bool necessitaDosJugadors = false;
-    [HideInInspector] public bool jugador1Preparat = false;
-    [HideInInspector] public bool jugador2Preparat = false;
+    [HideInInspector] public bool estaAgafat = false;
+
 
     public void IntentarColocar()
     {
