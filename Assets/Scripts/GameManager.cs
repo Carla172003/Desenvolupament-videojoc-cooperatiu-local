@@ -7,54 +7,69 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    private ControladorEscena controladorEscena;
+    
     private PuntColocacio[] puntsColocacio;
     private bool hasGuanyat = false;
     private bool hasPerdut = false;
 
-    [Header("Tiempo de juego (segundos)")]
-    public float tempsMaxim = 120f; // 2 minutos por ejemplo
-    private float tempsRestant;
-
     private void Awake()
     {
-        // Si no existe una instancia, esta será la principal
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Mantener entre escenas
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
-            // Si ya existe otra instancia, destruir esta
             Destroy(gameObject);
         }
     }
 
     void Start()
     {
-        puntsColocacio = FindObjectsOfType<PuntColocacio>();
-        tempsRestant = tempsMaxim;
+        controladorEscena = FindObjectOfType<ControladorEscena>();
     }
 
-    void Update()
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (hasGuanyat || hasPerdut) return;
+        Debug.Log("Escena cargada: " + scene.name);
 
-        // Reducir tiempo
-        tempsRestant -= Time.deltaTime;
-
-        if (tempsRestant <= 0)
+        // Solo inicializar la partida cuando entramos a Nivell1
+        if (scene.name == "Nivell1")
         {
-            tempsRestant = 0;
-            hasPerdut = true;
-            SceneManager.LoadScene("Derrota");
+            IniciarPartida();
         }
+    }
+    
+    public void IniciarPartida()
+    {
+        hasGuanyat = false;
+        hasPerdut = false;
 
+        Debug.Log("Partida iniciada.");
+        establirLlistaPunts();
+    }
+
+    private void establirLlistaPunts()
+    {
+        Debug.Log("Establint llista de punts de col·locació.");
+        puntsColocacio = FindObjectsOfType<PuntColocacio>();
+        if (puntsColocacio == null)
+        {
+            Debug.LogWarning("No s'han trobat punts de col·locació a l'escena actual.");
+        }
+        Debug.Log("S'han trobat " + puntsColocacio.Length + " punts de col·locació.");
+        foreach (PuntColocacio punt in puntsColocacio)
+        {
+            Debug.Log("Punt de col·locació establert: " + punt.idCorrecte);
+        }
     }
 
     public void ComprovarVictoria()
     {
-        if (hasGuanyat || hasPerdut) return; // Evita comprobar si ya terminó
+        if (hasGuanyat || hasPerdut) return; 
 
         bool totsColocats = true;
 
@@ -70,7 +85,16 @@ public class GameManager : MonoBehaviour
         if (totsColocats)
         {
             hasGuanyat = true;
-            SceneManager.LoadScene("Victoria");
+            controladorEscena.CarregarEscena("Victoria");
         }
     }
+
+    public void PerderPartida()
+    {
+        if (hasGuanyat || hasPerdut) return; // Evita comprobar si ya terminó
+
+        hasPerdut = true;
+        controladorEscena.CarregarEscena("Derrota");
+    }
+
 }

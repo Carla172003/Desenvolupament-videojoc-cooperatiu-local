@@ -67,3 +67,6 @@ TagManager:
   - name: Objectes
     uniqueID: 3589503643
     locked: 0
+  - name: Pantalla
+    uniqueID: 99808061
+    locked: 0
