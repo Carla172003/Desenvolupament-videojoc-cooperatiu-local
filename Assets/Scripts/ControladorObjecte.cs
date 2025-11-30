@@ -40,7 +40,7 @@ public class ControladorObjecte : MonoBehaviour
             foreach (var r in rends)
             {
                 if (r != null)
-                    r.sortingLayerName = "SiluetesEscenari";
+                    r.sortingLayerName = "Decoracions";
             }
 
             Rigidbody2D[] rbs = GetComponentsInChildren<Rigidbody2D>();
