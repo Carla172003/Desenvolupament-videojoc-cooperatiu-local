@@ -67,6 +67,8 @@ public class AgafarObjecte : MonoBehaviour
         obj.transform.SetParent(puntAgafar.transform);
         PosicionarARasDeSol(obj);
 
+        IgnorarColisionsJugador(obj, true);
+
         objecteAgafat = obj;
         teObjecte = true;
 
@@ -83,6 +85,9 @@ public class AgafarObjecte : MonoBehaviour
         rb.isKinematic = false;
 
         objecteAgafat.transform.SetParent(null);
+
+        IgnorarColisionsJugador(objecteAgafat, false);
+
 
         ControladorObjecte colocable = objecteAgafat.GetComponent<ControladorObjecte>();
 
@@ -121,4 +126,38 @@ public class AgafarObjecte : MonoBehaviour
         else if (CompareTag("Ma2"))
             specialKey = KeyCode.O;
     }
+
+    private void OnDrawGizmos()
+    {
+        // Obté el collider (si existeix)
+        BoxCollider2D box = GetComponent<BoxCollider2D>();
+        if (box == null) return;
+
+        // Color del gizmo (groc)
+        Gizmos.color = Color.green;
+
+        // Calcular posició i mides amb offset i escala
+        Vector3 pos = box.transform.TransformPoint(box.offset);
+        Vector3 size = Vector3.Scale(box.size, box.transform.lossyScale);
+
+        // Dibuixa el rectangle
+        Gizmos.DrawWireCube(pos, size);
+    }
+
+    private void IgnorarColisionsJugador(GameObject obj, bool ignorar)
+    {
+        Collider2D objCol = obj.GetComponent<Collider2D>();
+        if (objCol == null) return;
+
+        Collider2D[] playerCols = GetComponentsInParent<Collider2D>();
+
+        foreach (var col in playerCols)
+        {
+            if (!col.isTrigger)
+            {
+                Physics2D.IgnoreCollision(objCol, col, ignorar);
+            }
+        }
+    }
+
 }

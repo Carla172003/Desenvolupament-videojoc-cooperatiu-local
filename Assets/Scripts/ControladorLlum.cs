@@ -10,8 +10,8 @@ public class ControladorLlum : MonoBehaviour
     public float maxIntensity = 1.2f;
 
     [Header("Radio (Opcional)")]
-    public float minRadius = 2.3f;
-    public float maxRadius = 3.3f;
+    public float minRadius = 1.8f;
+    public float maxRadius = 3.5f;
 
     [Header("Velocidad del parpadeo")]
     public float flickerSpeed = 1f;
