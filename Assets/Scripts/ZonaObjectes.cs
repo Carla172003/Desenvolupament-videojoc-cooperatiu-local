@@ -12,7 +12,6 @@ public class ZonaObjectes : MonoBehaviour
     private bool jugadorProper = false;
     private KeyCode specialKey = KeyCode.S;
 
-
     void Update()
     {
         if (jugadorProper && Input.GetKeyDown(specialKey))
@@ -34,22 +33,6 @@ public class ZonaObjectes : MonoBehaviour
         // Crear nou objecte al punt d'spawn
         GameObject nouObjecte = Instantiate(prefab, puntSpawn.position, Quaternion.identity);
         nouObjecte.name = prefab.name;
-
-
-        // Assignar el punt correcte a l'objecte col·locable
-        ControladorObjecte objScript = nouObjecte.GetComponent<ControladorObjecte>();
-        if (objScript != null)
-        {
-            PuntColocacio[] punts = FindObjectsOfType<PuntColocacio>();
-            foreach (var punt in punts)
-            {
-                if (punt.idCorrecte == objScript.idObjecte)
-                {
-                    objScript.puntCorrecte = punt;
-                    break;
-                }
-            }
-        }
 
         // Eliminar prefab de la llista per no repetir
         objectesPossibles.RemoveAt(index);

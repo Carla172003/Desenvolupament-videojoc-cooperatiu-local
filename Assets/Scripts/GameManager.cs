@@ -3,22 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Gestor principal del joc, controla l'estat general de la partida i la transició d'escenes.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     private ControladorEscena controladorEscena;
+    private ControladorPuntuacio controladorPuntuacio;
+    private ControladorCrono controladorCrono;
+    private ControladorPanellsInfo controladorPanells;
     
     private PuntColocacio[] puntsColocacio;
-    private bool hasGuanyat = false;
-    private bool hasPerdut = false;
+    private bool finalitzada = false;
+    public int puntuacio = 0;
 
+    // Assegura que només hi hagi una instància del GameManager i que persisteixi entre escenes
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            // Registra el mètode OnSceneLoaded per gestionar la càrrega d'escenes
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
@@ -27,49 +35,59 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Estableix el controlador d'escena
     void Start()
     {
         controladorEscena = FindObjectOfType<ControladorEscena>();
+        
     }
 
+    // Gestiona la càrrega d'escenes
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Escena cargada: " + scene.name);
+        if (scene.name.StartsWith("Nivell"))
+        {
+            Debug.Log("Escena carregada: " + scene.name);
+            StartCoroutine(MostrarPanelesCoroutine());
+            controladorPuntuacio = FindObjectOfType<ControladorPuntuacio>();
+            controladorCrono = FindObjectOfType<ControladorCrono>();
+        }
+    }
 
-        // Solo inicializar la partida cuando entramos a Nivell1
-        if (scene.name == "Nivell1")
+    private IEnumerator MostrarPanelesCoroutine()
+    {
+        // Esperar un frame para que todos los objetos de la escena estén inicializados
+        yield return new WaitForEndOfFrame();
+
+        controladorPanells = FindObjectOfType<ControladorPanellsInfo>();
+        if (controladorPanells != null)
+        {
+            controladorPanells.MostrarInstruccions();
+        }
+        else
         {
             IniciarPartida();
         }
     }
     
+    // Inicia la partida
     public void IniciarPartida()
     {
-        hasGuanyat = false;
-        hasPerdut = false;
-
-        Debug.Log("Partida iniciada.");
-        establirLlistaPunts();
+        finalitzada = false;
+        puntuacio = 0;
+        agafarLlistaPunts();
     }
 
-    private void establirLlistaPunts()
+    // Agafa la llista dels punts de col·locació d'objectes del nivell
+    private void agafarLlistaPunts()
     {
-        Debug.Log("Establint llista de punts de col·locació.");
         puntsColocacio = FindObjectsOfType<PuntColocacio>();
-        if (puntsColocacio == null)
-        {
-            Debug.LogWarning("No s'han trobat punts de col·locació a l'escena actual.");
-        }
-        Debug.Log("S'han trobat " + puntsColocacio.Length + " punts de col·locació.");
-        foreach (PuntColocacio punt in puntsColocacio)
-        {
-            Debug.Log("Punt de col·locació establert: " + punt.idCorrecte);
-        }
     }
 
+    // Comprova si s'ha aconseguit la victòria
     public void ComprovarVictoria()
     {
-        if (hasGuanyat || hasPerdut) return; 
+        if (finalitzada) return; 
 
         bool totsColocats = true;
 
@@ -81,20 +99,33 @@ public class GameManager : MonoBehaviour
                 break;
             }
         }
+        puntuacio = controladorPuntuacio.puntuacio;
+        Debug.Log("Puntuació actual: " + puntuacio);
 
         if (totsColocats)
         {
-            hasGuanyat = true;
+            finalitzada = true;
+            controladorCrono.PararCrono();
+            Debug.Log(" Puntuació final: " + puntuacio);
+            puntuacio = controladorPuntuacio.CalcularPuntuacioFinal(controladorCrono.tempsRestant * 100);
+            Debug.Log(" Puntuació final actualitzada: " + puntuacio);
             controladorEscena.CarregarEscena("Victoria");
         }
     }
 
+    // Finalitza la partida amb derrotass
     public void PerderPartida()
     {
-        if (hasGuanyat || hasPerdut) return; // Evita comprobar si ya terminó
+        if (finalitzada) return; 
 
-        hasPerdut = true;
+        finalitzada = true;
         controladorEscena.CarregarEscena("Derrota");
+    }
+
+    // Retorna la puntuació del nivell actual
+    public int GetPuntuacio()
+    {
+        return puntuacio;
     }
 
 }

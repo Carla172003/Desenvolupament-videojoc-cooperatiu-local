@@ -253,6 +253,20 @@ public class MovimentsJugadors : MonoBehaviour
         // Dibuixar el controlador de terra
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(controladorTerra.position, midaCaixaControlador);
+
+        // Obté el collider (si existeix)
+        BoxCollider2D box = GetComponent<BoxCollider2D>();
+        if (box == null) return;
+
+        // Color del gizmo (groc)
+        Gizmos.color = Color.blue;
+
+        // Calcular posició i mides amb offset i escala
+        Vector3 pos = box.transform.TransformPoint(box.offset);
+        Vector3 size = Vector3.Scale(box.size, box.transform.lossyScale);
+
+        // Dibuixa el rectangle
+        Gizmos.DrawWireCube(pos, size);
     }
 
 }

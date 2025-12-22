@@ -52,14 +52,14 @@ TagManager:
   - name: Fons
     uniqueID: 3126162131
     locked: 0
-  - name: Decoracions
-    uniqueID: 228894293
-    locked: 0
   - name: Telons
     uniqueID: 561255457
     locked: 0
   - name: Terra
     uniqueID: 1069808487
+    locked: 0
+  - name: Decoracions
+    uniqueID: 228894293
     locked: 0
   - name: Escales
     uniqueID: 1511290585
