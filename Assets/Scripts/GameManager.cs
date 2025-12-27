@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name.StartsWith("Nivell"))
         {
-            Debug.Log("Escena carregada: " + scene.name);
             StartCoroutine(MostrarPanelesCoroutine());
             controladorPuntuacio = FindObjectOfType<ControladorPuntuacio>();
             controladorCrono = FindObjectOfType<ControladorCrono>();
@@ -98,17 +97,19 @@ public class GameManager : MonoBehaviour
                 totsColocats = false;
                 break;
             }
+            if (!punt.ColorEsCorrecto())
+            {
+                totsColocats = false;
+                break;
+            }
         }
         puntuacio = controladorPuntuacio.puntuacio;
-        Debug.Log("Puntuació actual: " + puntuacio);
 
         if (totsColocats)
         {
             finalitzada = true;
             controladorCrono.PararCrono();
-            Debug.Log(" Puntuació final: " + puntuacio);
             puntuacio = controladorPuntuacio.CalcularPuntuacioFinal(controladorCrono.tempsRestant * 100);
-            Debug.Log(" Puntuació final actualitzada: " + puntuacio);
             controladorEscena.CarregarEscena("Victoria");
         }
     }

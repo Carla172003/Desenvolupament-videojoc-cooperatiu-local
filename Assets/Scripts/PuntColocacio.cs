@@ -34,5 +34,18 @@ public class PuntColocacio : MonoBehaviour
         Color nuevoColor = colorsDisponibles[index];
 
         spotlight.color = nuevoColor;
+        GameManager.Instance?.ComprovarVictoria();
+        
     }
+
+    public bool ColorEsCorrecto()
+    {
+        // Si no hay luz asociada, no se requiere comprobación de color
+        if (spotlight == null)
+            return true;
+
+        // Comparación con tolerancia
+        return spotlight.color.Equals(colorCorrecto);
+    }
+
 }

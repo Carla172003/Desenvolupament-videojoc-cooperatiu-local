@@ -70,7 +70,6 @@ public class ControladorObjecte : MonoBehaviour
         FindObjectOfType<ControladorPuntuacio>()?.SumarPunts(100);
 
         // Encendre llum si és focus
-        // Notificar lógica especial SOLO si existe
         ControladorFocus focus = GetComponent<ControladorFocus>();
         if (focus != null)
         {

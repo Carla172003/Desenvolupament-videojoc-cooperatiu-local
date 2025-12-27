@@ -16,16 +16,13 @@ public class ControladorPanellsInfo : MonoBehaviour
     {
         panellActual = 0;
 
-        Debug.Log("Mostrant panell d'instruccions: " + panellActual);
 
         for (int i = 0; i < panells.Length; i++)
         {
             panells[i].SetActive(i == panellActual);
-            Debug.Log($"Panel {i} activo? {panells[i].activeInHierarchy} Pos: {panells[i].transform.position}");
         }
 
         RectTransform rt = panells[0].GetComponent<RectTransform>();
-        Debug.Log($"Panel tamaño: {rt.rect.width}x{rt.rect.height}, pos: {rt.anchoredPosition}");
 
 
         // Pausar el joc mientras se muestran las instrucciones
