@@ -34,5 +34,31 @@ public class PuntColocacio : MonoBehaviour
         Color nuevoColor = colorsDisponibles[index];
 
         spotlight.color = nuevoColor;
+        GameManager.Instance?.ComprovarVictoria();
+        
     }
+
+    public bool ColorEsCorrecto()
+    {
+        if (spotlight == null)
+            return true;
+
+        Color a = spotlight.color;
+        Color b = colorCorrecto;
+
+        float tolerancia = 0.01f;
+
+        bool correcto =
+            Mathf.Abs(a.r - b.r) < tolerancia &&
+            Mathf.Abs(a.g - b.g) < tolerancia &&
+            Mathf.Abs(a.b - b.b) < tolerancia;
+
+        Debug.Log(
+            $"PuntColocacio: {name} → Spotlight {a} | Correcte {b} | Resultat: {correcto}"
+        );
+
+        return correcto;
+    }
+
+
 }

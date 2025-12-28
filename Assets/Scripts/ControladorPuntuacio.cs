@@ -19,8 +19,6 @@ public class ControladorPuntuacio : MonoBehaviour
         
         puntuacio += punts;
         puntuacioUI.text = puntuacio + " pts";  
-        Debug.Log("Punts sumats: " + punts + ". Puntuació actual: " + puntuacio);
-        Debug.Log(puntuacioUI.text);
     }
 
     // Calcula la puntuació final

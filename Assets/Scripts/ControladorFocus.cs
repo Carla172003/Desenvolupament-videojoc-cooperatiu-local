@@ -39,24 +39,4 @@ public class ControladorFocus : MonoBehaviour
         c.a = 1f;
         spotlight.color = c;
     }
-
-    public void CambiarColor()
-    {
-        if (spotlight == null || colorsDisponibles.Length == 0) return;
-
-        int index = System.Array.IndexOf(colorsDisponibles, colorActual);
-        index = (index + 1) % colorsDisponibles.Length;
-
-        colorActual = colorsDisponibles[index];
-        spotlight.color = colorActual;
-    }
-
-    public void CambiarColorAleatorio()
-    {
-        if (spotlight == null || colorsDisponibles.Length == 0) return;
-
-        int index = Random.Range(0, colorsDisponibles.Length);
-        colorActual = colorsDisponibles[index];
-        spotlight.color = colorActual;
-    }
 }

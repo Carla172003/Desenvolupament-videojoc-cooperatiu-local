@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name.StartsWith("Nivell"))
         {
-            Debug.Log("Escena carregada: " + scene.name);
             StartCoroutine(MostrarPanelesCoroutine());
             controladorPuntuacio = FindObjectOfType<ControladorPuntuacio>();
             controladorCrono = FindObjectOfType<ControladorCrono>();
@@ -86,34 +85,42 @@ public class GameManager : MonoBehaviour
 
     // Comprova si s'ha aconseguit la victòria
     public void ComprovarVictoria()
+{
+    if (finalitzada) return;
+
+    bool totsColocats = true;
+
+    // Comprovar punts de col·locació
+    foreach (PuntColocacio punt in puntsColocacio)
     {
-        if (finalitzada) return; 
-
-        bool totsColocats = true;
-
-        foreach (PuntColocacio punt in puntsColocacio)
+        if (!punt.ocupat || !punt.ColorEsCorrecto())
         {
-            if (!punt.ocupat)
-            {
-                totsColocats = false;
-                break;
-            }
-        }
-        puntuacio = controladorPuntuacio.puntuacio;
-        Debug.Log("Puntuació actual: " + puntuacio);
-
-        if (totsColocats)
-        {
-            finalitzada = true;
-            controladorCrono.PararCrono();
-            Debug.Log(" Puntuació final: " + puntuacio);
-            puntuacio = controladorPuntuacio.CalcularPuntuacioFinal(controladorCrono.tempsRestant * 100);
-            Debug.Log(" Puntuació final actualitzada: " + puntuacio);
-            controladorEscena.CarregarEscena("Victoria");
+            totsColocats = false;
+            break;
         }
     }
 
-    // Finalitza la partida amb derrotass
+    if (!totsColocats) return;
+
+    // Comprovar NPCs vestits
+    ControladorNPC[] npcs = FindObjectsOfType<ControladorNPC>();
+
+    foreach (ControladorNPC npc in npcs)
+    {
+        if (!npc.estaVestit)
+        {
+            return; // Algún NPC no está vestido
+        }
+    }
+
+    // TODO correcto Victoria
+    finalitzada = true;
+    controladorCrono.PararCrono();
+    puntuacio = controladorPuntuacio.CalcularPuntuacioFinal(controladorCrono.tempsRestant * 100);
+    controladorEscena.CarregarEscena("Victoria");
+}
+
+    // Finalitza la partida amb derrota
     public void PerderPartida()
     {
         if (finalitzada) return; 

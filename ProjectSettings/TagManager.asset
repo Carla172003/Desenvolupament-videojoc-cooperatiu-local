@@ -12,6 +12,7 @@ TagManager:
   - TerraInvisible
   - Ma1
   - Ma2
+  - NPCs
   layers:
   - Default
   - TransparentFX
