@@ -9,7 +9,12 @@ public class ControladorNPC : MonoBehaviour
     public float minIdleTime = 1.5f;
     public float maxIdleTime = 4f;
 
-    private Animator animator;
+    [HideInInspector]
+    public Animator animator;
+
+    public bool estaVestit { get; private set; } = false;
+
+
     private bool miraDreta = true; // true = derecha, false = izquierda
 
     void Start()
@@ -17,6 +22,16 @@ public class ControladorNPC : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetBool("isWalking", false);
         StartCoroutine(WanderRoutine());
+    }
+
+    public void SetVestidoPuesto(bool puesto)
+    {
+        estaVestit = puesto;
+
+        if (animator != null)
+        {
+            animator.SetBool("estaVestit", puesto);
+        }
     }
 
     IEnumerator WanderRoutine()
@@ -27,28 +42,21 @@ public class ControladorNPC : MonoBehaviour
             animator.SetBool("isWalking", false);
             yield return new WaitForSeconds(Random.Range(minIdleTime, maxIdleTime));
 
-            // Decide dirección (-1 izquierda, 1 derecha)
+            // Decide dirección
             int direction = Random.value < 0.5f ? -1 : 1;
 
             // Girar solo si hace falta
             if ((direction == 1 && !miraDreta) || (direction == -1 && miraDreta))
-            {
                 Girar();
-            }
 
             Vector3 startPos = transform.position;
             Vector3 targetPos = startPos + Vector3.right * direction * moveDistance;
 
             // --- WALK ---
             animator.SetBool("isWalking", true);
-
             while (Vector3.Distance(transform.position, targetPos) > 0.01f)
             {
-                transform.position = Vector3.MoveTowards(
-                    transform.position,
-                    targetPos,
-                    speed * Time.deltaTime
-                );
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
                 yield return null;
             }
 
@@ -65,3 +73,4 @@ public class ControladorNPC : MonoBehaviour
         transform.localScale = escala;
     }
 }
+

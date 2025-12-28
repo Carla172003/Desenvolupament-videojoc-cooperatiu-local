@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TablaIdiomas_ca
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: ca
+  m_SharedData: {fileID: 11400000, guid: d06b49f1c68c14edcbb66e274d157c42, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 8842320441877200925
+  m_TableData:
+  - m_Id: 22182617088
+    m_Localized: Tornar al menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5399787855872
+    m_Localized: Derrota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5903221776384
+    m_Localized: Jugador 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5966207639552
+    m_Localized: Jugador 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6024202280960
+    m_Localized: 'AWSD i Fletxes pel moviment dels personatges
+
+
+      E i Shift
+      per agafar objectes i interactuar amb l''entorn'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6629520039936
+    m_Localized: Juga!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6702370906112
+    m_Localized: Instruccions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6864879214592
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7648165486592
+    m_Localized: Nivell pausat
+    m_Metadata:
+      m_Items:
+      - rid: 8842320441877200925
+  - m_Id: 7773982023680
+    m_Localized: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7847596253184
+    m_Localized: Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8583180705792
+    m_Localized: Objectiu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8736352493568
+    m_Localized: "Recollir els objectes del magatzem i col\xB7locar-los a la silueta
+      correcta de l'escenari"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8921342271488
+    m_Localized: Entes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9347554861056
+    m_Localized: Recordeu!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9431961034752
+    m_Localized: 'AWSD i Fletxes pel moviment
+
+
+      E i Shift per agafar/deixar
+      anar objectes'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9905724448768
+    m_Localized: Iniciar partida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10449981530112
+    m_Localized: "Benvinguts al teatre!\n\nEl telon est\xE0 a punt d'obrir-se, per\xF2
+      l'escenari encara no est\xE0 llest.\n\nTreballeu junts per col\xB7locar els
+      objectes al seu lloc abans que s'acabi el temps.\n\nTots dos jugadors poden
+      moure objectes i activar mecanismes.\n\nAlgunes accions requereixen cooperaci\xF3.\n\nObserveu
+      l'escenari i comuniqueu-vos."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11541809192960
+    m_Localized: Nivell 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11707643584512
+    m_Localized: Victoria!
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 8842320441877200925
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e02fbaf4060000

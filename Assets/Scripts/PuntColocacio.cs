@@ -40,12 +40,25 @@ public class PuntColocacio : MonoBehaviour
 
     public bool ColorEsCorrecto()
     {
-        // Si no hay luz asociada, no se requiere comprobación de color
         if (spotlight == null)
             return true;
 
-        // Comparación con tolerancia
-        return spotlight.color.Equals(colorCorrecto);
+        Color a = spotlight.color;
+        Color b = colorCorrecto;
+
+        float tolerancia = 0.01f;
+
+        bool correcto =
+            Mathf.Abs(a.r - b.r) < tolerancia &&
+            Mathf.Abs(a.g - b.g) < tolerancia &&
+            Mathf.Abs(a.b - b.b) < tolerancia;
+
+        Debug.Log(
+            $"PuntColocacio: {name} → Spotlight {a} | Correcte {b} | Resultat: {correcto}"
+        );
+
+        return correcto;
     }
+
 
 }

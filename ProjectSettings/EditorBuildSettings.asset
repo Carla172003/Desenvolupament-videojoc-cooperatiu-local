@@ -23,4 +23,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Derrota.unity
     guid: 0162f672c1d5c4c9ca64a64c229ad5ae
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Config.unity
+    guid: bdae87db7925b4bf09689be182d9496f
+  - enabled: 1
+    path: Assets/Scenes/Instruccions.unity
+    guid: ec96ed5fa3c5a4b24b0c79e70d69f103
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 6313dfbb1e53f430f9f6c335d74e4da7, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 79ae5d41207c54cba93cf2d3e0880fea, type: 2}

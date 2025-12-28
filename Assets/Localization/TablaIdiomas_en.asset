@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TablaIdiomas_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: d06b49f1c68c14edcbb66e274d157c42, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 22182617088
+    m_Localized: Back to menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5399787855872
+    m_Localized: Defeat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5903221776384
+    m_Localized: Player 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5966207639552
+    m_Localized: Player 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6024202280960
+    m_Localized: 'WASD and Arrow keys for character movement
+
+
+      E and Shift
+      to pick up objects and interact with the environment'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6629520039936
+    m_Localized: Play!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6702370906112
+    m_Localized: Instructions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6864879214592
+    m_Localized: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7648165486592
+    m_Localized: Paused level
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7773982023680
+    m_Localized: Continue
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7847596253184
+    m_Localized: Restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8583180705792
+    m_Localized: Goal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8736352493568
+    m_Localized: Collect the objects from the warehouse and place them in the correct
+      silhouette on the stage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8921342271488
+    m_Localized: Understood
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9347554861056
+    m_Localized: Remember!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9431961034752
+    m_Localized: 'AWSD and Arrow keys for movement
+
+
+      E and Shift to pick up/drop
+      objects'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9905724448768
+    m_Localized: Start game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10449981530112
+    m_Localized: 'Welcome to the theater!
+
+
+      The curtain is about to rise, but
+      the stage isn''t ready yet.
+
+
+      Work together to put the objects in place
+      before time runs out.
+
+
+      Both players can move objects and activate mechanisms.
+
+
+      Some
+      actions require cooperation.
+
+
+      Observe the stage and communicate.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11541809192960
+    m_Localized: Level 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11707643584512
+    m_Localized: Victory!
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
