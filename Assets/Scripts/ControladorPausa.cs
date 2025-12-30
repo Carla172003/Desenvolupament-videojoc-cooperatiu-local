@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ControladorPausa : MonoBehaviour
 {
+
     void Start()
     {
         gameObject.SetActive(false); // Assegura que el menú de pausa estigui desactivat al començar
@@ -12,8 +13,9 @@ public class ControladorPausa : MonoBehaviour
     
     public void PausarJoc()
     {
+
         Time.timeScale = 0f; // Pausa el joc
-        gameObject.SetActive(true);
+        gameObject.SetActive(true);  
     }
 
     public void ReprendreJoc()
@@ -21,4 +23,5 @@ public class ControladorPausa : MonoBehaviour
         Time.timeScale = 1f; // Reanuda el joc
         gameObject.SetActive(false);
     }
+    
 }

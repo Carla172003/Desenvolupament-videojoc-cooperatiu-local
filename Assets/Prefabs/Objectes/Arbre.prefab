@@ -86,10 +86,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idObjecte: Arbre
-  puntCorrecte: {fileID: 0}
   snapDistance: 1
   colocat: 0
   estaAgafat: 0
+  snapSound: {fileID: 8300000, guid: 40ddb173a56074edaa9ddb9424c9b8d6, type: 3}
 --- !u!61 &1147931299291334841
 BoxCollider2D:
   m_ObjectHideFlags: 0

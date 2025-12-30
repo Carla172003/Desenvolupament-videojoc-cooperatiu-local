@@ -217,10 +217,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idObjecte: EspassaRoca
-  puntCorrecte: {fileID: 0}
   snapDistance: 0.5
   colocat: 0
   estaAgafat: 0
+  snapSound: {fileID: 8300000, guid: 40ddb173a56074edaa9ddb9424c9b8d6, type: 3}
 --- !u!50 &-7288752462410145090
 Rigidbody2D:
   serializedVersion: 4

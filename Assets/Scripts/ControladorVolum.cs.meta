@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: b9e385eb3010246248aaf3e36ad06cf1
+guid: 4462c707c134a49b3b06dfe2499e4f00
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - snapSound: {fileID: 8300000, guid: 40ddb173a56074edaa9ddb9424c9b8d6, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

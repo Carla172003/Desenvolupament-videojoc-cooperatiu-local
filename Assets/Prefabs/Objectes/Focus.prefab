@@ -293,6 +293,7 @@ MonoBehaviour:
   snapDistance: 1
   colocat: 0
   estaAgafat: 0
+  snapSound: {fileID: 8300000, guid: 40ddb173a56074edaa9ddb9424c9b8d6, type: 3}
 --- !u!114 &7558379532561122303
 MonoBehaviour:
   m_ObjectHideFlags: 0

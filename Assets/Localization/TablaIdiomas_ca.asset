@@ -98,11 +98,26 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10449981530112
-    m_Localized: "Benvinguts al teatre!\n\nEl telon est\xE0 a punt d'obrir-se, per\xF2
-      l'escenari encara no est\xE0 llest.\n\nTreballeu junts per col\xB7locar els
-      objectes al seu lloc abans que s'acabi el temps.\n\nTots dos jugadors poden
-      moure objectes i activar mecanismes.\n\nAlgunes accions requereixen cooperaci\xF3.\n\nObserveu
-      l'escenari i comuniqueu-vos."
+    m_Localized: 'Benvinguts al teatre!
+
+
+      El telo esta a punt d''obrir-se,
+      pero l''escenari encara no esta llest.
+
+
+      Treballeu junts per col.locar
+      els objectes al seu lloc abans que s''acabi el temps.
+
+
+      Tots dos jugadors
+      poden moure objectes i activar mecanismes.
+
+
+      Algunes accions requereixen
+      cooperacio.
+
+
+      Observeu l''escenari i comuniqueu-vos.'
     m_Metadata:
       m_Items: []
   - m_Id: 11541809192960

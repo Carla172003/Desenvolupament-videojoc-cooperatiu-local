@@ -11,6 +11,9 @@ public class ControladorObjecte : MonoBehaviour
         [Header("Opcions d'agafar")]
         [HideInInspector] public bool estaAgafat = false;
 
+        [Header("So de Snap")]
+        public AudioClip snapSound;   
+
 
         public void IntentarColocar()
     {
@@ -45,6 +48,8 @@ public class ControladorObjecte : MonoBehaviour
         transform.position = puntTrobat.transform.position;
         transform.rotation = puntTrobat.transform.rotation;
         transform.localScale = Vector3.one;
+
+        AudioManager.Instance.ReproduirSoUncop(snapSound);
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.zero;

@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Nivell1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Pausa.unity
-    guid: 2896e10f7b5eb49039010d28df17078a
-  - enabled: 1
     path: Assets/Scenes/Victoria.unity
     guid: e161f102d7c2641bb8945962c1235333
   - enabled: 1
