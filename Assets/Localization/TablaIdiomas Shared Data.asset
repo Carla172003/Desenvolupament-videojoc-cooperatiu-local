@@ -95,6 +95,38 @@ MonoBehaviour:
     m_Key: Victoria
     m_Metadata:
       m_Items: []
+  - m_Id: 1468948586422272
+    m_Key: ObjectiuFocus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1470092960325632
+    m_Key: TeclesFocus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1473058547163136
+    m_Key: Nivell2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1477827990904832
+    m_Key: DesarrolladoPor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1478067703767040
+    m_Key: Agradecimientos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2147087457181696
+    m_Key: ObjectiuVestimenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2148610291523584
+    m_Key: TeclesVestimenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2149686055002112
+    m_Key: Nivell3
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

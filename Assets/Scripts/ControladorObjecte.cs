@@ -1,5 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// Controlador dels objectes col·locables del joc.
+/// Gestiona la lògica de col·locació en punts específics (PuntColocacio) quan els objectes
+/// es deixen a prop d'un punt amb l'ID correcte. Atorga punts i comprova la victòria.
+/// </summary>
 public class ControladorObjecte : MonoBehaviour
     {
         public string idObjecte; // Identificador únic per a l'objecte
@@ -15,7 +20,13 @@ public class ControladorObjecte : MonoBehaviour
         public AudioClip snapSound;   
 
 
-        public void IntentarColocar()
+    /// <summary>
+    /// Intenta col·locar l'objecte en un punt de col·locació proper.
+    /// Cerca el punt més proper amb ID coincident que estigui lliure i dins del rang de snap.
+    /// Si té èxit, col·loca l'objecte, desactiva la física, canvia la capa visual,
+    /// suma punts i comprova la victòria.
+    /// </summary>
+    public void IntentarColocar()
     {
         if (colocat) return;
 
@@ -49,7 +60,7 @@ public class ControladorObjecte : MonoBehaviour
         transform.rotation = puntTrobat.transform.rotation;
         transform.localScale = Vector3.one;
 
-        AudioManager.Instance.ReproduirSoUncop(snapSound);
+        ControladorSo.Instance.ReproduirSoUncop(snapSound);
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.zero;
@@ -88,6 +99,10 @@ public class ControladorObjecte : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Dibuixa gizmos a l'editor per visualitzar el collider de l'objecte.
+    /// Es mostra en color groc.
+    /// </summary>
     private void OnDrawGizmos()
     {
         // Obté el collider (si existeix)

@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Controlador dels personatges no jugables (NPC).
+/// Gestiona el comportament de vagareig aleatori i l'estat de vestit.
+/// Els NPCs poden ser vestits amb objectes específics per completar els objectius del nivell.
+/// </summary>
 public class ControladorNPC : MonoBehaviour
 {
     [Header("Movimiento")]
@@ -17,6 +22,9 @@ public class ControladorNPC : MonoBehaviour
 
     private bool miraDreta = true; // true = derecha, false = izquierda
 
+    /// <summary>
+    /// Inicialitza el NPC. Obté l'animator i comença la rutina de vagareig.
+    /// </summary>
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -24,6 +32,11 @@ public class ControladorNPC : MonoBehaviour
         StartCoroutine(WanderRoutine());
     }
 
+    /// <summary>
+    /// Estableix l'estat de vestit del NPC.
+    /// Actualitza l'animator per mostrar l'animació corresponent.
+    /// </summary>
+    /// <param name="puesto">True si el NPC està vestit, false si no.</param>
     public void SetVestidoPuesto(bool puesto)
     {
         estaVestit = puesto;
@@ -34,6 +47,11 @@ public class ControladorNPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Corutina que gestiona el comportament de vagareig del NPC.
+    /// Alterna entre períodes d'inactivitat i moviment en direcció aleatòria.
+    /// </summary>
+    /// <returns>IEnumerator per a la corutina.</returns>
     IEnumerator WanderRoutine()
     {
         while (true)
@@ -65,6 +83,9 @@ public class ControladorNPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gira el sprite del NPC horitzontalment invertint l'escala X.
+    /// </summary>
     private void Girar()
     {
         miraDreta = !miraDreta;

@@ -111,6 +111,56 @@ MonoBehaviour:
     m_Localized: Victoria!
     m_Metadata:
       m_Items: []
+  - m_Id: 1468948586422272
+    m_Localized: 'Recoger los focos del almacen y colocarlos en la silueta correcta.
+      Ademas, ajustar la iluminacion para que coincida con el color correcto.
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1470092960325632
+    m_Localized: 'AWSD y Flechas para el movimiento.
+
+      E y Shift para coger/soltar
+      objetos y cambiar de color el foco.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1473058547163136
+    m_Localized: Nivel 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1477827990904832
+    m_Localized: 'Desarrollado por:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1478067703767040
+    m_Localized: 'Gracias a mis tutores, por guiar este proyecto.
+
+
+      A mi familia,
+      por su apoyo constante.
+
+
+      Y especialmente a mis hermanos, cuya esencia
+      dio vida a los protagonistas.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2147087457181696
+    m_Localized: Preguntar al actor que vestimenta necesita, ir a buscarla al almacen
+      y llevarsela.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2148610291523584
+    m_Localized: 'AWSD y Flechas para el movimiento.
+
+      E y Shift para coger/soltar
+      objetos, cambiar de color el foco y vestir a los actores.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2149686055002112
+    m_Localized: Nivel 3
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

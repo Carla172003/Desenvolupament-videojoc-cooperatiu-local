@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// Controlador dels objectes focus (llums) que es poden col·locar.
+/// Quan un focus es col·loca en un PuntColocacio amb spotlight,
+/// s'encarrega d'encendre el llum amb el color adequat.
+/// </summary>
 public class ControladorFocus : MonoBehaviour
 {
     private Light2D spotlight;
@@ -11,8 +16,11 @@ public class ControladorFocus : MonoBehaviour
     public Color[] colorsDisponibles;
 
     /// <summary>
-    /// Se llama SOLO cuando el focus se coloca en un punto con luz
+    /// Configura el focus quan es col·loca en un punt amb llum.
+    /// Assigna el spotlight del punt i estableix el color inicial.
+    /// Aquest mètode només es crida quan el punt té un spotlight.
     /// </summary>
+    /// <param name="punt">El punt de col·locació amb el spotlight.</param>
     public void ConfigurarDesdePunt(PuntColocacio punt)
     {
         // Si este punto no usa luz, no hacemos nada
@@ -29,6 +37,10 @@ public class ControladorFocus : MonoBehaviour
         spotlight.color = colorActual;
     }
 
+    /// <summary>
+    /// Encen el llum del focus establint la intensitat a 1.
+    /// Aplica el color actual al spotlight.
+    /// </summary>
     public void EncenderLuz()
     {
         if (spotlight == null) return;

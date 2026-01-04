@@ -1,12 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Gestiona la interacció dels jugadors amb els NPCs.
+/// Permet vestir NPCs amb objectes que tinguin l'idObjecte corresponent.
+/// Mostra diàlegs si el jugador interacciona sense l'objecte correcte.
+/// </summary>
 public class InteraccioNPC : MonoBehaviour
 {
     [Header("Diálogo")]
     public SpriteRenderer dialogoSprite;    
     public KeyCode teclaJugador1 = KeyCode.E;
-    public KeyCode teclaJugador2 = KeyCode.O;
+    public KeyCode teclaJugador2 = KeyCode.RightShift;
     public float tiempoMostrar = 5f;        
 
     [Header("ID del NPC")]
@@ -19,6 +24,9 @@ public class InteraccioNPC : MonoBehaviour
     private bool jugador2Cerca = false;
     private ControladorObjecte objetoCerca = null;
 
+    /// <summary>
+    /// Inicialitza el component. Desactiva el sprite de diàleg i obté el controlador del NPC.
+    /// </summary>
     void Start()
     {
         if (dialogoSprite != null)
@@ -28,6 +36,10 @@ public class InteraccioNPC : MonoBehaviour
             controladorNPC = GetComponentInParent<ControladorNPC>();
     }
 
+    /// <summary>
+    /// Comprova cada frame si algun jugador proper prem la tecla d'interacció.
+    /// No permet interaccions si el NPC ja està vestit.
+    /// </summary>
     void Update()
     {
         if (controladorNPC != null && controladorNPC.estaVestit)
@@ -46,6 +58,11 @@ public class InteraccioNPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Executa la interacció amb el NPC.
+    /// Si hi ha un objecte correcte proper, vesteix el NPC i comprova la victòria.
+    /// Si no, mostra el diàleg temporal.
+    /// </summary>
     private void Interactuar()
     {
         // Colocar vestimenta si hay objeto correcto
@@ -57,14 +74,15 @@ public class InteraccioNPC : MonoBehaviour
             // Cambiar animaciones del NPC
             controladorNPC.SetVestidoPuesto(true);
             // Comprobar victoria
-            Debug.Log("Interacción: Comprobando victoria después de vestir NPC " + controladorNPC.name);
             GameManager.Instance?.ComprovarVictoria();
         }
         else
         {
+            Debug.Log("Interacción NPC sin objeto correcto.");
             // Mostrar diálogo
             if (dialogoSprite != null)
             {
+                Debug.Log("Mostrar diálogo NPC.");
                 dialogoSprite.enabled = true;
                 StopAllCoroutines();
                 StartCoroutine(DesactivarDialogo());
@@ -72,6 +90,10 @@ public class InteraccioNPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Corutina que desactiva el diàleg després d'un temps establert.
+    /// </summary>
+    /// <returns>IEnumerator per a la corutina.</returns>
     private IEnumerator DesactivarDialogo()
     {
         yield return new WaitForSeconds(tiempoMostrar);
@@ -79,6 +101,11 @@ public class InteraccioNPC : MonoBehaviour
             dialogoSprite.enabled = false;
     }
 
+    /// <summary>
+    /// Detecta quan un jugador o objecte entra a l'àrea d'interacció del NPC.
+    /// Guarda la referència del jugador i de l'objecte proper si coincideix amb l'ID del NPC.
+    /// </summary>
+    /// <param name="other">El collider que ha entrat.</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Jugador1"))
@@ -91,6 +118,11 @@ public class InteraccioNPC : MonoBehaviour
             objetoCerca = obj;
     }
 
+    /// <summary>
+    /// Detecta quan un jugador o objecte surt de l'àrea d'interacció del NPC.
+    /// Neteja les referències corresponents.
+    /// </summary>
+    /// <param name="other">El collider que ha sortit.</param>
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Jugador1"))
