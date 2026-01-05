@@ -125,6 +125,55 @@ MonoBehaviour:
     m_Localized: Victory!
     m_Metadata:
       m_Items: []
+  - m_Id: 1468948586422272
+    m_Localized: Collect the spotlights from the warehouse and place them in the
+      correct silhouette. You will also need to adjust the lighting to match the
+      correct color.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1470092960325632
+    m_Localized: 'AWSD and Arrow keys for movement.
+
+      E and Shift to pick up/drop
+      objects and change the focus color.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1473058547163136
+    m_Localized: Level 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1477827990904832
+    m_Localized: 'Created by:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1478067703767040
+    m_Localized: 'Thanks to my tutors for guiding this project.
+
+
+      To my family
+      for their constant support.
+
+
+      And especially to my siblings, whose essence
+      brought the characters to life.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2147087457181696
+    m_Localized: Ask the actor what clothing he needs, go get it from the warehouse
+      and take it with him.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2148610291523584
+    m_Localized: 'AWSD and Arrow keys for movement.
+
+      E and Shift to pick up/drop
+      objects, change the focus color and dress the actors.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2149686055002112
+    m_Localized: Level 3
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

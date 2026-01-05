@@ -13,7 +13,10 @@ public class ControladorPuntuacio : MonoBehaviour
     [SerializeField] private TextMeshProUGUI puntuacioUI;
     public int puntuacio = 0;
 
-    // Suma punts a la puntuació actual
+    /// <summary>
+    /// Suma punts a la puntuació actual i actualitza la UI.
+    /// </summary>
+    /// <param name="punts">Quantitat de punts a sumar.</param>
     public void SumarPunts(int punts)
     {
         
@@ -21,13 +24,26 @@ public class ControladorPuntuacio : MonoBehaviour
         puntuacioUI.text = puntuacio + " pts";  
     }
 
-    // Calcula la puntuació final
+    /// <summary>
+    /// Calcula la puntuació final sumant el temps restant a la puntuació actual.
+    /// </summary>
+    /// <param name="tempsRestant">Temps restant en segons.</param>
+    /// <returns>Puntuació final calculada.</returns>
     public int CalcularPuntuacioFinal(float tempsRestant)
     {
         return puntuacio + Mathf.RoundToInt(tempsRestant);
     }
     
-    // Calcula les estrelles obtingudes
+    /// <summary>
+    /// Calcula el nombre d'estrelles obtingudes segons la puntuació i el temps.
+    /// Retorna 0 estrelles si s'acaba el temps.
+    /// </summary>
+    /// <param name="objectesColocats">Nombre d'objectes col·locats correctament.</param>
+    /// <param name="totalObjectes">Total d'objectes del nivell.</param>
+    /// <param name="tempsRestant">Temps restant en segons.</param>
+    /// <param name="timeOut">True si s'ha acabat el temps.</param>
+    /// <param name="puntsPerObjecte">Punts atorgats per cada objecte (per defecte 100).</param>
+    /// <returns>Nombre d'estrelles (0-3).</returns>
     public int CalcularEstrelles(
         int objectesColocats,
         int totalObjectes,

@@ -31,28 +31,37 @@ public class ControladorCrono : MonoBehaviour
         }
     }
 
-    // Inicialitza el cronòmetre al temps màxim
+    /// <summary>
+    /// Inicialitza el cronòmetre al temps màxim i l'activa.
+    /// </summary>
     public void EstablirCrono()
     {
         tempsRestant = tempsMaxim;
         ActivarCrono();
     }
 
-    // Para el cronòmetre
+    /// <summary>
+    /// Para el cronòmetre i pausa el joc establint Time.timeScale a 0.
+    /// </summary>
     public void PararCrono()
     {
         cronoActiu = false;
         Time.timeScale = 0f;
     }
 
-    // Activa el cronòmetre
+    /// <summary>
+    /// Activa el cronòmetre i reprendre el joc establint Time.timeScale a 1.
+    /// </summary>
     public void ActivarCrono()
     {
         cronoActiu = true;
         Time.timeScale = 1f;
     }
 
-    // Resta el temps del cronòmetre cada frame
+    /// <summary>
+    /// Resta el temps del cronòmetre cada frame.
+    /// Quan arriba a zero, crida GameManager per perdre la partida.
+    /// </summary>
     private void RestarTemps()
     {
         tempsRestant -= Time.deltaTime;
@@ -64,7 +73,9 @@ public class ControladorCrono : MonoBehaviour
         ActualitzarUI();
     }
     
-    // Actualitza la UI del cronòmetre
+    /// <summary>
+    /// Actualitza la UI del cronòmetre amb format MM:SS.
+    /// </summary>
     private void ActualitzarUI()
     {
         // Format MM:SS

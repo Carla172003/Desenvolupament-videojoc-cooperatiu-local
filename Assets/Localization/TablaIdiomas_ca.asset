@@ -98,11 +98,26 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10449981530112
-    m_Localized: "Benvinguts al teatre!\n\nEl telon est\xE0 a punt d'obrir-se, per\xF2
-      l'escenari encara no est\xE0 llest.\n\nTreballeu junts per col\xB7locar els
-      objectes al seu lloc abans que s'acabi el temps.\n\nTots dos jugadors poden
-      moure objectes i activar mecanismes.\n\nAlgunes accions requereixen cooperaci\xF3.\n\nObserveu
-      l'escenari i comuniqueu-vos."
+    m_Localized: 'Benvinguts al teatre!
+
+
+      El telo esta a punt d''obrir-se,
+      pero l''escenari encara no esta llest.
+
+
+      Treballeu junts per col.locar
+      els objectes al seu lloc abans que s''acabi el temps.
+
+
+      Tots dos jugadors
+      poden moure objectes i activar mecanismes.
+
+
+      Algunes accions requereixen
+      cooperacio.
+
+
+      Observeu l''escenari i comuniqueu-vos.'
     m_Metadata:
       m_Items: []
   - m_Id: 11541809192960
@@ -111,6 +126,54 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 11707643584512
     m_Localized: Victoria!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1468948586422272
+    m_Localized: "Recollir els focus del magatzem i col.locar-los a la silueta correcta.
+      A m\xE9s,  ajustar la il.luminacio perque coincideixi amb el color correcte."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1470092960325632
+    m_Localized: 'AWSD i Fletxes per moviment.
+
+      E i Shift per agafar/deixar
+      anar objectes i canviar de color el focus.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1473058547163136
+    m_Localized: Nivell 2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1477827990904832
+    m_Localized: 'Desenvolupat per:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1478067703767040
+    m_Localized: 'Gracies als meus tutors per guiar aquest projecte.
+
+
+      A la
+      meva familia, pel seu suport constant.
+
+
+      I especialment als meus germans,
+      l''essencia dels quals va donar vida als protagonistes.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2147087457181696
+    m_Localized: Preguntar a l'actor quina vestimenta necessita, anar a buscar-la
+      al magatzem i portar-se-la.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2148610291523584
+    m_Localized: 'AWSD i Fletxes per moviment.
+
+      E i Shift per agafar/deixar
+      anar objectes, canviar de color el focus i vestir als actors.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2149686055002112
+    m_Localized: Nivell 3
     m_Metadata:
       m_Items: []
   references:

@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controlador de moviments dels jugadors.
+/// Gestiona el moviment horitzontal, salt, interacció amb escales i animacions.
+/// Suporta dos jugadors amb tecles diferents segons el tag (Jugador1 o Jugador2).
+/// </summary>
 public class MovimentsJugadors : MonoBehaviour
 {
     private Rigidbody2D rb;
@@ -43,6 +48,10 @@ public class MovimentsJugadors : MonoBehaviour
     [Header("Animacions")]
     private Animator animator;
 
+    /// <summary>
+    /// Inicialitza els components i assigna les tecles segons el jugador.
+    /// Determina si és Jugador1 o Jugador2 segons el tag de l'objecte.
+    /// </summary>
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -53,6 +62,10 @@ public class MovimentsJugadors : MonoBehaviour
         agafarObjecte = GetComponentInChildren<AgafarObjecte>();
     }
 
+    /// <summary>
+    /// Processa l'input del jugador cada frame.
+    /// Gestiona el moviment horitzontal, vertical (escales), salt i animacions.
+    /// </summary>
     void Update()
     {
         // Moviment horitzontal
@@ -70,6 +83,10 @@ public class MovimentsJugadors : MonoBehaviour
         animator.SetFloat("VelocitatY", rb.velocity.y);
     }
 
+    /// <summary>
+    /// Aplica el moviment físic del jugador cada frame fixat.
+    /// Comprova si el jugador està a terra, actualitza animacions i aplica forces.
+    /// </summary>
     private void FixedUpdate()
     {
         // Comprovar si està a terra
@@ -95,6 +112,11 @@ public class MovimentsJugadors : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Assigna les tecles de control segons el jugador.
+    /// Jugador1: A/D (horitzontal), W/S (vertical)
+    /// Jugador2: Fletxes esquerra/dreta (horitzontal), Fletxes amunt/avall (vertical)
+    /// </summary>
     private void assignarTecles() 
     {
         // Asignar tecles segons el tag
@@ -107,13 +129,17 @@ public class MovimentsJugadors : MonoBehaviour
         }
         else 
         {
-            leftKey = KeyCode.J;
-            rightKey = KeyCode.L;
-            upKey = KeyCode.I;
-            downKey = KeyCode.K;
+            leftKey = KeyCode.LeftArrow;
+            rightKey = KeyCode.RightArrow;
+            upKey = KeyCode.UpArrow;
+            downKey = KeyCode.DownArrow;
         }
     }
 
+    /// <summary>
+    /// Processa l'input de moviment horitzontal del jugador.
+    /// Si està enganxat a una escala, no permet moviment horitzontal llevat que premi les tecles per desenganxar-se.
+    /// </summary>
     private void processarInputHoritzontal() {
         // Si està a l'escala i enganxat, no pot moure's dreta/esquerra
         if (escales && rb.gravityScale == 0f)
@@ -137,6 +163,11 @@ public class MovimentsJugadors : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Processa l'input de moviment vertical per a les escales.
+    /// Els jugadors no poden pujar escales si estan agafant un objecte.
+    /// Quan es prem amunt o avall estant en contacte amb una escala, el jugador s'hi enganxa.
+    /// </summary>
     private void processarInputEscales()
     {
         // Si està agafant un objecte, no es pot enganxar a l'escala
@@ -173,10 +204,14 @@ public class MovimentsJugadors : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Comprova si el jugador està en contacte amb terra, objectes o l'altre jugador.
+    /// Utilitza Physics2D.OverlapBoxAll per detectar col·lisions a la base del jugador.
+    /// Els jugadors poden estar a sobre l'un de l'altre.
+    /// </summary>
     private void comprovarEstaAterra()
     {
         Collider2D[] hits = Physics2D.OverlapBoxAll(controladorTerra.position, midaCaixaControlador, 0f);
-
         estaAterra = false;
 
         foreach (var hit in hits)
@@ -194,6 +229,12 @@ public class MovimentsJugadors : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Executa el moviment horitzontal i el salt del jugador.
+    /// Aplica suavitzat al moviment i gira el sprite segons la direcció.
+    /// </summary>
+    /// <param name="moure">Quantitat de moviment horitzontal a aplicar.</param>
+    /// <param name="saltar">Si el jugador ha de saltar en aquest frame.</param>
     private void executarMoviment(float moure, bool saltar)
     {
         // Suavitzar el moviment
@@ -218,6 +259,10 @@ public class MovimentsJugadors : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gira el sprite del jugador horitzontalment invertint l'escala X.
+    /// S'utilitza per orientar el jugador segons la direcció de moviment.
+    /// </summary>
     private void Girar()
     {
         // Girar el jugador
@@ -227,6 +272,11 @@ public class MovimentsJugadors : MonoBehaviour
         transform.localScale = escala;
     }
 
+    /// <summary>
+    /// Detecta quan el jugador entra en contacte amb una escala.
+    /// Guarda la referència al centre de l'escala per centrar el jugador.
+    /// </summary>
+    /// <param name="other">El collider amb el qual ha col·lisionat.</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Si el jugador entra en contacte amb una escala
@@ -237,6 +287,11 @@ public class MovimentsJugadors : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Detecta quan el jugador surt del contacte amb una escala.
+    /// Restaura la gravetat i neteja la referència al centre de l'escala.
+    /// </summary>
+    /// <param name="other">El collider del qual s'ha separat.</param>
     private void OnTriggerExit2D(Collider2D other)
     {
         // Si el jugador surt de l'escala
@@ -248,6 +303,10 @@ public class MovimentsJugadors : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Dibuixa gizmos a l'editor per visualitzar el controlador de terra i el collider del jugador.
+    /// El controlador de terra es mostra en vermell, el collider en blau.
+    /// </summary>
     private void OnDrawGizmos()
     {
         // Dibuixar el controlador de terra

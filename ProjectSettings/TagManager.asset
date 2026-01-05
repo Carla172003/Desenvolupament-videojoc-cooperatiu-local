@@ -13,6 +13,7 @@ TagManager:
   - Ma1
   - Ma2
   - NPCs
+  - PanelFade
   layers:
   - Default
   - TransparentFX
