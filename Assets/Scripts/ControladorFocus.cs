@@ -17,7 +17,7 @@ public class ControladorFocus : MonoBehaviour
 
     /// <summary>
     /// Configura el focus quan es col·loca en un punt amb llum.
-    /// Assigna el spotlight del punt i estableix el color inicial.
+    /// Assigna el spotlight del punt i estableix un color inicial aleatori.
     /// Aquest mètode només es crida quan el punt té un spotlight.
     /// </summary>
     /// <param name="punt">El punt de col·locació amb el spotlight.</param>
@@ -32,7 +32,11 @@ public class ControladorFocus : MonoBehaviour
         spotlight.intensity = 0f;
 
         if (colorsDisponibles.Length > 0)
-            colorActual = colorsDisponibles[0];
+        {
+            // Seleccionar un color aleatori de la llista
+            int indexAleatori = Random.Range(0, colorsDisponibles.Length);
+            colorActual = colorsDisponibles[indexAleatori];
+        }
 
         spotlight.color = colorActual;
     }

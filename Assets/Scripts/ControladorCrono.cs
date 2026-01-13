@@ -14,7 +14,16 @@ public class ControladorCrono : MonoBehaviour
     public bool cronoActiu = false;
 
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI cronoUI; 
+    [SerializeField] private TextMeshProUGUI cronoUI;
+    
+    [Header("Avís temps crític")]
+    [SerializeField] private float tempsAvís = 10f; // Temps en segons per activar l'avís
+    [SerializeField] private Color colorCrític = Color.red; // Color quan queden pocs segons
+    private Color colorNormal = Color.white; // Color normal del cronòmetre
+    private bool avisCritic = false; // Indica si ja s'ha activat l'avís
+    
+    [Header("So tic tac")]
+    [SerializeField] private AudioClip soTicTac; // So que es reprodueix en bucle quan queden pocs segons 
 
     // Inicia el cronòmetre
     void Start()
@@ -37,6 +46,11 @@ public class ControladorCrono : MonoBehaviour
     public void EstablirCrono()
     {
         tempsRestant = tempsMaxim;
+        avisCritic = false; // Reiniciar l'avís
+        if (cronoUI != null)
+        {
+            cronoUI.color = colorNormal; // Restaurar color normal
+        }
         ActivarCrono();
     }
 
@@ -61,10 +75,30 @@ public class ControladorCrono : MonoBehaviour
     /// <summary>
     /// Resta el temps del cronòmetre cada frame.
     /// Quan arriba a zero, crida GameManager per perdre la partida.
+    /// Activa avís visual i sonor quan queden pocs segons.
     /// </summary>
     private void RestarTemps()
     {
         tempsRestant -= Time.deltaTime;
+        
+        // Activar avís crític si queden menys de X segons
+        if (tempsRestant <= tempsAvís && !avisCritic)
+        {
+            avisCritic = true;
+            
+            // Canviar color del text a vermell
+            if (cronoUI != null)
+            {
+                cronoUI.color = colorCrític;
+            }
+            
+            // Reproduir so de tic tac una vegada (dura 10 segons)
+            if (soTicTac != null && ControladorSo.Instance != null)
+            {
+                ControladorSo.Instance.ReproduirSoUncop(soTicTac);
+            }
+        }
+        
         if (tempsRestant <= 0)
         {
             GameManager.Instance.PerderPartida();

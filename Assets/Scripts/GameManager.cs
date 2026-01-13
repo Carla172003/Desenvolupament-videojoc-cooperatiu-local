@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     private PuntColocacio[] puntsColocacio;
     private bool finalitzada = false;
     public int puntuacio = 0;
+    public int numEstrelles = 0;
+    private string nivellActual = ""; // Guarda el nom del nivell actual
     #endregion
 
     #region Inicialització Singleton
@@ -120,6 +122,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(MostrarPanelesCoroutine());
         controladorPuntuacio = FindObjectOfType<ControladorPuntuacio>();
         controladorCrono = FindObjectOfType<ControladorCrono>();
+        
+        // Netejar dependències d'objectes al iniciar el nivell
+        ControladorObjecte.NetejaDependencies();
     }
 
     /// <summary>
@@ -166,6 +171,7 @@ public class GameManager : MonoBehaviour
     {
         finalitzada = false;
         puntuacio = 0;
+        nivellActual = SceneManager.GetActiveScene().name;
         puntsColocacio = FindObjectsOfType<PuntColocacio>();
     }
 
@@ -224,6 +230,15 @@ public class GameManager : MonoBehaviour
         controladorCrono.PararCrono();
         puntuacio = controladorPuntuacio.CalcularPuntuacioFinal(controladorCrono.tempsRestant * 100);
         
+        // Calcular estrelles obtingudes i guardar-les al GameManager
+        numEstrelles = controladorPuntuacio.CalcularEstrelles(puntuacio, true);
+        
+        // Guardar les dades del nivell si s'ha millorat
+        if (GestorDadesNivells.Instance != null)
+        {
+            GestorDadesNivells.Instance.GuardarDadesNivell(nivellActual, puntuacio, numEstrelles);
+        }
+        
         AudioClip clipVictoria = ControladorSo.Instance?.clipVictoria;
         StartCoroutine(TransicioEscena(ESCENA_VICTORIA, clipVictoria));
     }
@@ -235,6 +250,12 @@ public class GameManager : MonoBehaviour
     {
         if (finalitzada) return;
         finalitzada = true;
+        
+        // Guardar la puntuació actual del ControladorPuntuacio al GameManager
+        if (controladorPuntuacio != null)
+        {
+            puntuacio = controladorPuntuacio.puntuacio;
+        }
         
         AudioClip clipDerrota = ControladorSo.Instance?.clipDerrota;
         StartCoroutine(TransicioEscena(ESCENA_DERROTA, clipDerrota));

@@ -1131,6 +1131,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3349857620679233819, guid: cce92c7cf5d3d44449c13ee485feeded, type: 3}
+      propertyPath: panelFade
+      value: 
+      objectReference: {fileID: 255342701}
     - target: {fileID: 8609723382885755527, guid: cce92c7cf5d3d44449c13ee485feeded, type: 3}
       propertyPath: m_Name
       value: GameManager

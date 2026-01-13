@@ -23,7 +23,6 @@ public class ControladorPausa : MonoBehaviour
     /// </summary>
     public void PausarJoc()
     {
-
         Time.timeScale = 0f; // Pausa el joc
         gameObject.SetActive(true);  
     }

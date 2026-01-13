@@ -16,13 +16,24 @@ public class ControladorObjecte : MonoBehaviour
         [Header("Opcions d'agafar")]
         [HideInInspector] public bool estaAgafat = false;
 
+        [Header("Dependències")]
+        [Tooltip("ID de l'objecte que ha d'estar col·locat abans que aquest")]
+        public string idObjecteDependencia = ""; // Si està buit, no té dependències
+        
         [Header("So de Snap")]
-        public AudioClip snapSound;   
+        public AudioClip snapSound;
+        
+        [Header("So d'Error")]
+        public AudioClip soError; // So que es reprodueix quan no es pot col·locar
+        
+        // Diccionari estàtic per trackear objectes col·locats
+        private static System.Collections.Generic.HashSet<string> objectesColocats = new System.Collections.Generic.HashSet<string>();   
 
 
     /// <summary>
     /// Intenta col·locar l'objecte en un punt de col·locació proper.
     /// Cerca el punt més proper amb ID coincident que estigui lliure i dins del rang de snap.
+    /// Verifica si l'objecte de dependència està col·locat abans de permetre la col·locació.
     /// Si té èxit, col·loca l'objecte, desactiva la física, canvia la capa visual,
     /// suma punts i comprova la victòria.
     /// </summary>
@@ -52,8 +63,24 @@ public class ControladorObjecte : MonoBehaviour
             }
         }
 
-        // No hi ha cap punt vàlid
+        // No hi ha cap punt vàlid a prop
         if (puntTrobat == null) return;
+        
+        // Ara que sabem que estem a prop d'un punt vàlid, verificar dependències
+        if (!string.IsNullOrEmpty(idObjecteDependencia))
+        {
+            if (!objectesColocats.Contains(idObjecteDependencia))
+            {
+                // L'objecte de dependència encara no està col·locat
+                // Reproduir so d'error només si estem a prop d'un punt
+                if (soError != null)
+                {
+                    ControladorSo.Instance?.ReproduirSoUncop(soError);
+                }
+                
+                return; // No permetre col·locació
+            }
+        }
 
         // 🔒 SNAP
         transform.position = puntTrobat.transform.position;
@@ -69,11 +96,26 @@ public class ControladorObjecte : MonoBehaviour
 
         colocat = true;
         puntTrobat.ocupat = true;
+        
+        // Registrar aquest objecte com a col·locat
+        objectesColocats.Add(idObjecte);
 
-        // Canviar capa
+        // Canviar capa i ordre de renderització
         SpriteRenderer[] rends = GetComponentsInChildren<SpriteRenderer>();
         foreach (var r in rends)
+        {
             r.sortingLayerName = "Decoracions";
+            
+            // Si aquest objecte depèn d'un altre, augmentar l'Order in Layer per mostrar-lo per sobre
+            if (!string.IsNullOrEmpty(idObjecteDependencia))
+            {
+                r.sortingOrder = 10; // Col·locar per sobre dels objectes base
+            }
+            else
+            {
+                r.sortingOrder = 0; // Ordre per defecte
+            }
+        }
 
         // Eliminar física
         foreach (var r in GetComponentsInChildren<Rigidbody2D>())
@@ -96,6 +138,14 @@ public class ControladorObjecte : MonoBehaviour
 
         // Comprovar victòria
         FindObjectOfType<GameManager>()?.ComprovarVictoria();
+    }
+    
+    /// <summary>
+    /// Neteja la llista d'objectes col·locats. Cridar quan es reinicia el nivell.
+    /// </summary>
+    public static void NetejaDependencies()
+    {
+        objectesColocats.Clear();
     }
 
 
