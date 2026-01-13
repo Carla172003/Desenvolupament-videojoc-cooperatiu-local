@@ -19,7 +19,7 @@ public class LanguageDropdown : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (languageDropdown == null) Debug.LogError("LanguageDropdown: languageDropdown is not assigned.");
+        if (languageDropdown == null) return;
         languageDropdown = GetComponent<TMP_Dropdown>();
 
         // Opcional: establecer el valor inicial según la lengua actual

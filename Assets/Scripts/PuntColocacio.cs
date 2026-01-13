@@ -72,10 +72,6 @@ public class PuntColocacio : MonoBehaviour
             Mathf.Abs(a.g - b.g) < tolerancia &&
             Mathf.Abs(a.b - b.b) < tolerancia;
 
-        Debug.Log(
-            $"PuntColocacio: {name} → Spotlight {a} | Correcte {b} | Resultat: {correcto}"
-        );
-
         return correcto;
     }
 

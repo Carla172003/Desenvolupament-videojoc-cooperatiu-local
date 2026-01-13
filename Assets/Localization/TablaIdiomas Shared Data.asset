@@ -127,6 +127,46 @@ MonoBehaviour:
     m_Key: Nivell3
     m_Metadata:
       m_Items: []
+  - m_Id: 3469193990103040
+    m_Key: Nivell4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3469270737477632
+    m_Key: Nivell5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845833479938048
+    m_Key: Pista
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845911548518400
+    m_Key: MagatzemBloquejat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3846477481762816
+    m_Key: DependenciaObjectes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3849813144625152
+    m_Key: UltimNivell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3858557517684736
+    m_Key: Plataforma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612184582643712
+    m_Key: Catala
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612227091914752
+    m_Key: Castella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612319584706560
+    m_Key: Angles
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -129,8 +129,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 1468948586422272
-    m_Localized: "Recollir els focus del magatzem i col.locar-los a la silueta correcta.
-      A m\xE9s,  ajustar la il.luminacio perque coincideixi amb el color correcte."
+    m_Localized: Recollir els focus del magatzem i col.locar-los a la silueta correcta.
+      A mes,  ajustar la il.luminacio perque coincideixi amb el color correcte.
     m_Metadata:
       m_Items: []
   - m_Id: 1470092960325632
@@ -174,6 +174,48 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 2149686055002112
     m_Localized: Nivell 3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3469193990103040
+    m_Localized: Nivell 4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3469270737477632
+    m_Localized: Nivell 5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845833479938048
+    m_Localized: Pista
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845911548518400
+    m_Localized: Alguns magatzems estaran bloquejats, necessitareu una clau per obrir-los.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3846477481762816
+    m_Localized: 'Alguns objectes depenen d''altres. S''ha de colocar primer el de
+      mes abaix. '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3849813144625152
+    m_Localized: 'Apliqueu tot lo apres. '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3858557517684736
+    m_Localized: Per pujar i baixar objectes entre plantes, necessitareu usar la
+      plataforma. Presioneu el boto per fer-la funcionar.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612184582643712
+    m_Localized: Catala
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612227091914752
+    m_Localized: Castella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612319584706560
+    m_Localized: Angles
     m_Metadata:
       m_Items: []
   references:

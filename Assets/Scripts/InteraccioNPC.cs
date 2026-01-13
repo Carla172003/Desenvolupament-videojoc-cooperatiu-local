@@ -19,6 +19,9 @@ public class InteraccioNPC : MonoBehaviour
 
     [Header("Referencia al NPC")]
     public ControladorNPC controladorNPC; // Asignar en inspector
+    
+    [Header("So")]
+    public AudioClip soVestimentaCorrecta; // So quan es col·loca correctament la vestimenta
 
     private bool jugador1Cerca = false;
     private bool jugador2Cerca = false;
@@ -71,18 +74,26 @@ public class InteraccioNPC : MonoBehaviour
             Destroy(objetoCerca.gameObject);
             objetoCerca = null;
 
+            // Reproducir sonido de éxito
+            if (soVestimentaCorrecta != null)
+            {
+                ControladorSo.Instance?.ReproduirSoUncop(soVestimentaCorrecta);
+            }
+
             // Cambiar animaciones del NPC
             controladorNPC.SetVestidoPuesto(true);
+            
+            // Sumar puntos por vestir al NPC
+            FindObjectOfType<ControladorPuntuacio>()?.SumarPunts(100);
+            
             // Comprobar victoria
             GameManager.Instance?.ComprovarVictoria();
         }
         else
         {
-            Debug.Log("Interacción NPC sin objeto correcto.");
             // Mostrar diálogo
             if (dialogoSprite != null)
             {
-                Debug.Log("Mostrar diálogo NPC.");
                 dialogoSprite.enabled = true;
                 StopAllCoroutines();
                 StartCoroutine(DesactivarDialogo());
