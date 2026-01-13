@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour
     public int puntuacio = 0;
     public int numEstrelles = 0;
     private string nivellActual = ""; // Guarda el nom del nivell actual
+    
+    // Estratègies de validació
+    private List<IValidacioEstrategia> estrategiesValidacio;
     #endregion
 
     #region Inicialització Singleton
@@ -173,52 +176,44 @@ public class GameManager : MonoBehaviour
         puntuacio = 0;
         nivellActual = SceneManager.GetActiveScene().name;
         puntsColocacio = FindObjectsOfType<PuntColocacio>();
+        
+        // Inicialitzar estratègies de validació
+        InicialitzarEstrategiesValidacio();
     }
 
     /// <summary>
-    /// Comprova si s'ha aconseguit la victòria verificant punts de col·locació i NPCs.
+    /// Inicialitza la llista d'estratègies de validació segons el patró Strategy.
+    /// Cada estratègia valida un tipus específic d'objectes (Attrezzo, Llums, Vestimenta).
+    /// </summary>
+    private void InicialitzarEstrategiesValidacio()
+    {
+        estrategiesValidacio = new List<IValidacioEstrategia>
+        {
+            new ValidacioAttrezzo(),
+            new ValidacioLlums(),
+            new ValidacioVestimenta()
+        };
+    }
+
+    /// <summary>
+    /// Comprova si s'ha aconseguit la victòria utilitzant les estratègies de validació.
+    /// Aplica el patró Strategy per validar els diferents tipus d'objectes.
     /// </summary>
     public void ComprovarVictoria()
     {
         if (finalitzada) return;
 
-        if (!ComprovarPuntsColocacio() || !ComprovarNPCsVestits())
+        // Validar amb totes les estratègies
+        foreach (IValidacioEstrategia estrategia in estrategiesValidacio)
         {
-            return;
+            if (!estrategia.Validar())
+            {
+                return; // Si alguna validació falla, no hi ha victòria
+            }
         }
 
+        // Si totes les validacions passen, victòria!
         FinalitzarAmbVictoria();
-    }
-
-    /// <summary>
-    /// Comprova que tots els punts de col·locació estiguin ocupats i amb el color correcte.
-    /// </summary>
-    private bool ComprovarPuntsColocacio()
-    {
-        foreach (PuntColocacio punt in puntsColocacio)
-        {
-            if (!punt.ocupat || !punt.ColorEsCorrecto())
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /// <summary>
-    /// Comprova que tots els NPCs estiguin vestits.
-    /// </summary>
-    private bool ComprovarNPCsVestits()
-    {
-        ControladorNPC[] npcs = FindObjectsOfType<ControladorNPC>();
-        foreach (ControladorNPC npc in npcs)
-        {
-            if (!npc.estaVestit)
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     /// <summary>

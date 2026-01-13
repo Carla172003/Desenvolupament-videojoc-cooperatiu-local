@@ -11273,7 +11273,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.08162308, y: 0}
+  m_Offset: {x: 0.030983448, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -11284,7 +11284,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.61229706, y: 1}
+  m_Size: {x: 0.5110178, y: 1}
   m_EdgeRadius: 0
 --- !u!4 &1036789205 stripped
 Transform:
@@ -12599,6 +12599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   socJugador1: 0
+  movimentHorizontal: 0
   velocitatMoviment: 400
   suavitzat: 0
   forcaSalt: 400
@@ -12607,9 +12608,7 @@ MonoBehaviour:
     m_Bits: 64
   controladorTerra: {fileID: 2082008988}
   midaCaixaControlador: {x: 0.9, y: 0.25, z: 0}
-  estaAterra: 0
   velocitatEscales: 8
-  centreEscales: {fileID: 0}
 --- !u!1001 &1253507522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19464,6 +19463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   socJugador1: 0
+  movimentHorizontal: 0
   velocitatMoviment: 400
   suavitzat: 0
   forcaSalt: 400
@@ -19472,9 +19472,7 @@ MonoBehaviour:
     m_Bits: 320
   controladorTerra: {fileID: 694795824}
   midaCaixaControlador: {x: 0.7, y: 0.25, z: 0}
-  estaAterra: 0
   velocitatEscales: 8
-  centreEscales: {fileID: 0}
 --- !u!1 &1998604158
 GameObject:
   m_ObjectHideFlags: 0
