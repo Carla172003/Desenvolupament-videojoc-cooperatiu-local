@@ -6,6 +6,41 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Menu.unity
+    guid: 52a90ea59189f4bb8ace3ce2b72a59f0
+  - enabled: 1
+    path: Assets/Scenes/SeleccioNivell.unity
+    guid: 86430f002df1a4e05ba19fd798724850
+  - enabled: 1
+    path: Assets/Scenes/Nivell1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Nivell2.unity
+    guid: 2e6273d05b7ce4b7a9eca65ab85cdb5e
+  - enabled: 1
+    path: Assets/Scenes/Nivell3.unity
+    guid: bd1ab6d9eee9c470a9b30de2f03fd1c2
+  - enabled: 1
+    path: Assets/Scenes/Nivell4.unity
+    guid: 8fde24c61b65e467387d9834d0ecbeba
+  - enabled: 1
+    path: Assets/Scenes/Nivell5.unity
+    guid: f46bd2bf062e14cc9ab376dec9a057a1
+  - enabled: 1
+    path: Assets/Scenes/Victoria.unity
+    guid: e161f102d7c2641bb8945962c1235333
+  - enabled: 1
+    path: Assets/Scenes/Derrota.unity
+    guid: 0162f672c1d5c4c9ca64a64c229ad5ae
+  - enabled: 1
+    path: Assets/Scenes/Config.unity
+    guid: bdae87db7925b4bf09689be182d9496f
+  - enabled: 1
+    path: Assets/Scenes/Instruccions.unity
+    guid: ec96ed5fa3c5a4b24b0c79e70d69f103
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 4015c462c90144cc8abe659d6b710cf9
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 6313dfbb1e53f430f9f6c335d74e4da7, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 79ae5d41207c54cba93cf2d3e0880fea, type: 2}

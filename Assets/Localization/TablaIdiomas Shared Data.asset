@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: TablaIdiomas Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: TablaIdiomas
+  m_TableCollectionNameGuidString: d06b49f1c68c14edcbb66e274d157c42
+  m_Entries:
+  - m_Id: 22182617088
+    m_Key: TornarMenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5399787855872
+    m_Key: Derrota
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5903221776384
+    m_Key: Jugador1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5966207639552
+    m_Key: Jugador2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6024202280960
+    m_Key: InfoTecles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6629520039936
+    m_Key: Juga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6702370906112
+    m_Key: Instruccions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6864879214592
+    m_Key: Credits
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7648165486592
+    m_Key: NivellPausat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7773982023680
+    m_Key: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7847596253184
+    m_Key: Reiniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8583180705792
+    m_Key: Objectiu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8736352493568
+    m_Key: RecollirObjectes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8921342271488
+    m_Key: Entes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9347554861056
+    m_Key: Recorda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9431961034752
+    m_Key: TeclesObjectes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9905724448768
+    m_Key: IniciarPartida
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10449981530112
+    m_Key: Benvolguda
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11541809192960
+    m_Key: Nivell1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11707643584512
+    m_Key: Victoria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1468948586422272
+    m_Key: ObjectiuFocus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1470092960325632
+    m_Key: TeclesFocus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1473058547163136
+    m_Key: Nivell2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1477827990904832
+    m_Key: DesarrolladoPor
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1478067703767040
+    m_Key: Agradecimientos
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2147087457181696
+    m_Key: ObjectiuVestimenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2148610291523584
+    m_Key: TeclesVestimenta
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2149686055002112
+    m_Key: Nivell3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3469193990103040
+    m_Key: Nivell4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3469270737477632
+    m_Key: Nivell5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845833479938048
+    m_Key: Pista
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845911548518400
+    m_Key: MagatzemBloquejat
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3846477481762816
+    m_Key: DependenciaObjectes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3849813144625152
+    m_Key: UltimNivell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3858557517684736
+    m_Key: Plataforma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612184582643712
+    m_Key: Catala
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612227091914752
+    m_Key: Castella
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4612319584706560
+    m_Key: Angles
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 8842320441877200920
+  references:
+    version: 2
+    RefIds:
+    - rid: 8842320441877200920
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1766949239519

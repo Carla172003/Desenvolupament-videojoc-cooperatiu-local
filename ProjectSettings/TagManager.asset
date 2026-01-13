@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Terra
+  - Escales
+  - Jugador1
+  - Jugador2
+  - Objecte
+  - TerraInvisible
+  - Ma1
+  - Ma2
+  - NPCs
+  - PanelFade
   layers:
   - Default
   - TransparentFX
@@ -11,9 +21,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Frontal
+  - Escales
+  - Objectes
   - 
   - 
   - 
@@ -40,4 +50,25 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Fons
+    uniqueID: 3126162131
+    locked: 0
+  - name: Terra
+    uniqueID: 1069808487
+    locked: 0
+  - name: Decoracions
+    uniqueID: 228894293
+    locked: 0
+  - name: Escales
+    uniqueID: 1511290585
+    locked: 0
+  - name: Telons
+    uniqueID: 561255457
+    locked: 0
+  - name: Jugadors i objectes
+    uniqueID: 3589503643
+    locked: 0
+  - name: UI
+    uniqueID: 99808061
     locked: 0
