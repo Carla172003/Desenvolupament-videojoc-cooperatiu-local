@@ -43,6 +43,9 @@ public class GameManager : MonoBehaviour
     
     // Estratègies de validació
     private List<IValidacioEstrategia> estrategiesValidacio;
+    
+    // Patró estat per gestionar estat de la partida
+    private EstatPartida estatActual;
     #endregion
 
     #region Inicialització Singleton
@@ -179,6 +182,9 @@ public class GameManager : MonoBehaviour
         
         // Inicialitzar estratègies de validació
         InicialitzarEstrategiesValidacio();
+        
+        // Inicialitzar estat com a Jugant
+        CanviarEstat(new EstatJugant(this));
     }
 
     /// <summary>
@@ -202,6 +208,7 @@ public class GameManager : MonoBehaviour
     public void ComprovarVictoria()
     {
         if (finalitzada) return;
+        if (estatActual == null || !estatActual.PotComprovarVictoria()) return;
 
         // Validar amb totes les estratègies
         foreach (IValidacioEstrategia estrategia in estrategiesValidacio)
@@ -213,13 +220,13 @@ public class GameManager : MonoBehaviour
         }
 
         // Si totes les validacions passen, victòria!
-        FinalitzarAmbVictoria();
+        estatActual.FinalitzarAmbVictoria();
     }
 
     /// <summary>
-    /// Finalitza la partida amb victòria.
+    /// Processa la victòria. Cridat per EstatFinalitzada.
     /// </summary>
-    private void FinalitzarAmbVictoria()
+    public void ProcessarVictoria()
     {
         finalitzada = true;
         controladorCrono.PararCrono();
@@ -244,6 +251,17 @@ public class GameManager : MonoBehaviour
     public void PerderPartida()
     {
         if (finalitzada) return;
+        if (estatActual != null)
+        {
+            estatActual.FinalitzarAmbDerrota();
+        }
+    }
+
+    /// <summary>
+    /// Processa la derrota. Cridat per EstatFinalitzada.
+    /// </summary>
+    public void ProcessarDerrota()
+    {
         finalitzada = true;
         
         // Guardar la puntuació actual del ControladorPuntuacio al GameManager
@@ -262,6 +280,32 @@ public class GameManager : MonoBehaviour
     public int GetPuntuacio()
     {
         return puntuacio;
+    }
+
+    /// <summary>
+    /// Canvia l'estat actual de la partida.
+    /// </summary>
+    public void CanviarEstat(EstatPartida nouEstat)
+    {
+        estatActual?.OnExit();
+        estatActual = nouEstat;
+        estatActual?.OnEnter();
+    }
+
+    /// <summary>
+    /// Pausa la partida.
+    /// </summary>
+    public void Pausar()
+    {
+        estatActual?.Pausar();
+    }
+
+    /// <summary>
+    /// Reprèn la partida.
+    /// </summary>
+    public void Reprendre()
+    {
+        estatActual?.Reprendre();
     }
     #endregion
 

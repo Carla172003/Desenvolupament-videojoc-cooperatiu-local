@@ -19,20 +19,26 @@ public class ControladorPausa : MonoBehaviour
     }
     
     /// <summary>
-    /// Pausa el joc establint Time.timeScale a 0 i activa el menú de pausa.
+    /// Pausa el joc utilitzant el GameManager i activa el menú de pausa.
     /// </summary>
     public void PausarJoc()
     {
-        Time.timeScale = 0f; // Pausa el joc
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.Pausar();
+        }
         gameObject.SetActive(true);  
     }
 
     /// <summary>
-    /// Reprendre el joc establint Time.timeScale a 1 i desactiva el menú de pausa.
+    /// Reprendre el joc utilitzant el GameManager i desactiva el menú de pausa.
     /// </summary>
     public void ReprendreJoc()
     {
-        Time.timeScale = 1f; // Reanuda el joc
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.Reprendre();
+        }
         gameObject.SetActive(false);
     }
     
