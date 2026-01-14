@@ -11,7 +11,7 @@ public class AgafarObjecte : MonoBehaviour
 {
     public GameObject puntAgafar; // Mano o punto donde se sujeta
     public float separacioDelSol = 0.05f; // Pequeña separación del suelo
-    public float offsetHoritzontal = 0f;  // Si quieres moverlo un poco a los lados
+    public float offsetHoritzontal = 0.3f;  // Desplaçament lateral respecte al personatge
     private GameObject objecteAgafat;
     private KeyCode specialKey;
     private Animator animator;
@@ -147,6 +147,10 @@ public class AgafarObjecte : MonoBehaviour
     /// <summary>
     /// Posiciona un objecte a ras de terra al punt d'agafada del jugador.
     /// Calcula l'alçada del collider de l'objecte i ajusta la seva posició Y.
+    /// Utilitza posició directa per evitar acumulació de desplaçament.
+    /// L'offset horitzontal s'adapta segons la direcció que mira el personatge.
+    /// El lateral del collider de l'objecte es posiciona al costat del jugador.
+    /// La base del collider de l'objecte està a la mateixa altura que la base del jugador.
     /// </summary>
     /// <param name="obj">L'objecte a posicionar.</param>
     private void PosicionarARasDeSol(GameObject obj)
@@ -154,17 +158,28 @@ public class AgafarObjecte : MonoBehaviour
         Collider2D col = obj.GetComponent<Collider2D>();
         if (col == null) return;
 
-        // Altura del collider
+        // Mides del collider de l'objecte
         float altura = col.bounds.size.y;
+        float amplada = col.bounds.size.x;
 
-        // Y actual del borde inferior del objeto
-        float yBaseActual = col.bounds.min.y;
+        // Obtenir el collider del jugador per saber l'altura del terra
+        Collider2D jugadorCol = transform.parent.GetComponent<Collider2D>();
+        float alturaDelTerra = jugadorCol != null ? jugadorCol.bounds.min.y : puntAgafar.transform.position.y;
 
-        // Diferencia que hay entre donde está su base y donde debería estar
-        float diferenciaY = puntAgafar.transform.position.y - yBaseActual;
+        // Calcular la posició Y del centre de l'objecte perquè la seva base estigui al terra
+        float posicioYDesitjada = alturaDelTerra + (altura / 2f) + separacioDelSol;
 
-        // Mueve el objeto entero esa diferencia hacia arriba o abajo
-        obj.transform.position += new Vector3(0, diferenciaY + separacioDelSol, 0);
+        // Determinar la direcció del personatge (localScale.x negatiu = mira esquerra)
+        float direccio = transform.parent.localScale.x > 0 ? 1f : -1f;
+
+        // Calcular desplaçament: offset + meitat de l'amplada per col·locar el lateral
+        float desplacamentTotal = (offsetHoritzontal + (amplada / 2f)) * direccio;
+
+        // Establir posició directament (no acumulativa)
+        Vector3 novaPosicio = obj.transform.position;
+        novaPosicio.y = posicioYDesitjada;
+        novaPosicio.x = puntAgafar.transform.position.x + desplacamentTotal;
+        obj.transform.position = novaPosicio;
     }
 
     /// <summary>

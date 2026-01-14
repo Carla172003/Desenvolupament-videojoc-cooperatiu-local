@@ -6,51 +6,51 @@ using UnityEngine;
 /// Controlador de moviments dels jugadors.
 /// Gestiona el moviment horitzontal, salt, interacció amb escales i animacions.
 /// Suporta dos jugadors amb tecles diferents segons el tag (Jugador1 o Jugador2).
+/// Utilitza el patró Estat per gestionar els diferents tipus de moviment.
 /// </summary>
 public class MovimentsJugadors : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    // Components
+    public Rigidbody2D rb { get; private set; }
+    public Animator animator { get; private set; }
+    public AgafarObjecte agafarObjecte { get; private set; }
+
+    // Estat actual del jugador
+    private EstatJugador estatActual;
 
     [SerializeField] private bool socJugador1;
 
     [Header("Moviment Horizontal Jugador")]
-    private float movimentHorizontal = 0f;
-    [SerializeField] private float velocitatMoviment;
+    public float movimentHorizontal = 0f;
+    [SerializeField] public float velocitatMoviment;
     [Range(0f, 0.3f)] [SerializeField] private float suavitzat;
 
     private Vector3 velocitat = Vector3.zero;
     private bool miraDreta = true;
 
     [Header("Salt Jugador")]
-    [SerializeField] private float forcaSalt;
+    [SerializeField] public float forcaSalt;
     [SerializeField] private LayerMask queEsTerra;
     [SerializeField] private Transform controladorTerra;
     [SerializeField] private Vector3 midaCaixaControlador;
-    [SerializeField] private bool estaAterra;
-    private float gravetat = 1.5f;
-    private bool salt = false;
+    public bool estaAterra { get; set; }
+    public float gravetat { get; private set; } = 1.5f;
 
-    [Header("Escales")]
-    private float movimentVertical = 0f;
-    private bool escales = false;
-    [SerializeField] private float velocitatEscales;
-    [SerializeField] private Transform centreEscales;
+    // Escales
+    public bool escales { get; set; } = false;
+    [SerializeField] public float velocitatEscales;
+    public Transform centreEscales { get; set; }
 
-    [Header("Tecles")]
-    private KeyCode leftKey;
-    private KeyCode rightKey;
-    private KeyCode upKey;
-    private KeyCode downKey;
-
-    [Header("Agafar Objectes")]
-    private AgafarObjecte agafarObjecte;
-
-    [Header("Animacions")]
-    private Animator animator;
+    // Tecles
+    public KeyCode leftKey { get; private set; }
+    public KeyCode rightKey { get; private set; }
+    public KeyCode upKey { get; private set; }
+    public KeyCode downKey { get; private set; }
 
     /// <summary>
     /// Inicialitza els components i assigna les tecles segons el jugador.
     /// Determina si és Jugador1 o Jugador2 segons el tag de l'objecte.
+    /// Inicialitza l'estat per defecte (EstadoNormal).
     /// </summary>
     void Start()
     {
@@ -60,56 +60,33 @@ public class MovimentsJugadors : MonoBehaviour
         socJugador1 = CompareTag("Jugador1");
         assignarTecles();
         agafarObjecte = GetComponentInChildren<AgafarObjecte>();
+
+        // Inicialitzar estat per defecte
+        estatActual = new EstatCaminant(this);
     }
 
     /// <summary>
-    /// Processa l'input del jugador cada frame.
-    /// Gestiona el moviment horitzontal, vertical (escales), salt i animacions.
+    /// Processa l'input del jugador cada frame utilitzant l'estat actual.
     /// </summary>
     void Update()
     {
-        // Moviment horitzontal
-        processarInputHoritzontal();
+        // Processar input segons l'estat actual
+        estatActual.ProcessarInput();
 
-        // Moviment escales
-        processarInputEscales();
-        
-        // Salt
-        if (Input.GetKeyDown(upKey))
-            salt = true;
-
-        // Animacions
-        animator.SetFloat("Horizontal", Mathf.Abs(movimentHorizontal));
-        animator.SetFloat("VelocitatY", rb.velocity.y);
+        // Comprovar si cal canviar d'estat
+        EstatJugador nouEstat = estatActual.ComprovarTransicions();
+        if (nouEstat != null)
+        {
+            estatActual = nouEstat;
+        }
     }
 
     /// <summary>
-    /// Aplica el moviment físic del jugador cada frame fixat.
-    /// Comprova si el jugador està a terra, actualitza animacions i aplica forces.
+    /// Aplica el moviment físic del jugador cada frame fixat utilitzant l'estat actual.
     /// </summary>
     private void FixedUpdate()
     {
-        // Comprovar si està a terra
-        comprovarEstaAterra();
-
-        // Actualitzar estats animacions
-        animator.SetBool("estaAterra", estaAterra);
-        animator.SetBool("estaEscales", escales && rb.gravityScale == 0f);
-
-        // Aplicar moviment
-        if (escales && rb.gravityScale == 0f)
-        {
-            // Moviment vertical a escales
-            rb.velocity = new Vector2(movimentHorizontal * Time.fixedDeltaTime, movimentVertical);
-        }
-        else
-        {
-            // Moviment horitzontal i salt
-            executarMoviment(movimentHorizontal * Time.fixedDeltaTime, salt);
-        }
-        
-        salt = false;
-        
+        estatActual.ActualitzarFisica();
     }
 
     /// <summary>
@@ -137,79 +114,12 @@ public class MovimentsJugadors : MonoBehaviour
     }
 
     /// <summary>
-    /// Processa l'input de moviment horitzontal del jugador.
-    /// Si està enganxat a una escala, no permet moviment horitzontal llevat que premi les tecles per desenganxar-se.
-    /// </summary>
-    private void processarInputHoritzontal() {
-        // Si està a l'escala i enganxat, no pot moure's dreta/esquerra
-        if (escales && rb.gravityScale == 0f)
-        {
-            movimentHorizontal = 0f;
-
-            // Si prem esquerra o dreta, es desenganxa de l'escala
-            if (Input.GetKeyDown(leftKey) || Input.GetKeyDown(rightKey))
-            {
-                rb.gravityScale = gravetat;
-            }
-        }
-        // Moviment horitzontal fora de l'escala
-        else {
-            if (Input.GetKey(leftKey))
-                movimentHorizontal = -velocitatMoviment;
-            else if (Input.GetKey(rightKey))
-                movimentHorizontal = velocitatMoviment;
-            else
-                movimentHorizontal = 0f; 
-        }
-    }
-
-    /// <summary>
-    /// Processa l'input de moviment vertical per a les escales.
-    /// Els jugadors no poden pujar escales si estan agafant un objecte.
-    /// Quan es prem amunt o avall estant en contacte amb una escala, el jugador s'hi enganxa.
-    /// </summary>
-    private void processarInputEscales()
-    {
-        // Si està agafant un objecte, no es pot enganxar a l'escala
-        if (agafarObjecte != null && agafarObjecte.teObjecte)
-        {
-            movimentVertical = 0f;
-            return; 
-        }
-
-            // Enganxar-se a l'escala si està en contacte i prem up o down
-        if (escales && (Input.GetKeyDown(upKey) || Input.GetKeyDown(downKey)))
-        {
-            rb.gravityScale = 0f;
-            rb.velocity = Vector2.zero;   
-
-            // Centrar al jugador en la escalera
-            if (centreEscales != null) {
-                Vector3 pos = transform.position;
-                pos.x = centreEscales.position.x;
-                transform.position = pos;
-            }
-        }
-
-        // Moviment vertical a l'escala només si està enganxat
-        if (escales && rb.gravityScale == 0f)
-        {
-            if (Input.GetKey(upKey)) {
-                movimentVertical = velocitatEscales;
-            }
-            else if (Input.GetKey(downKey))
-                movimentVertical = -velocitatEscales;
-            else
-                movimentVertical = 0f;
-        }
-    }
-
-    /// <summary>
     /// Comprova si el jugador està en contacte amb terra, objectes o l'altre jugador.
     /// Utilitza Physics2D.OverlapBoxAll per detectar col·lisions a la base del jugador.
     /// Els jugadors poden estar a sobre l'un de l'altre.
+    /// Mètode públic cridat pels estats.
     /// </summary>
-    private void comprovarEstaAterra()
+    public void ComprovarEstaAterra()
     {
         Collider2D[] hits = Physics2D.OverlapBoxAll(controladorTerra.position, midaCaixaControlador, 0f);
         estaAterra = false;
@@ -232,10 +142,11 @@ public class MovimentsJugadors : MonoBehaviour
     /// <summary>
     /// Executa el moviment horitzontal i el salt del jugador.
     /// Aplica suavitzat al moviment i gira el sprite segons la direcció.
+    /// Mètode públic cridat pels estats.
     /// </summary>
     /// <param name="moure">Quantitat de moviment horitzontal a aplicar.</param>
     /// <param name="saltar">Si el jugador ha de saltar en aquest frame.</param>
-    private void executarMoviment(float moure, bool saltar)
+    public void ExecutarMoviment(float moure, bool saltar)
     {
         // Suavitzar el moviment
         Vector3 velocitatObjectiu = new Vector2(moure, rb.velocity.y);
@@ -327,5 +238,4 @@ public class MovimentsJugadors : MonoBehaviour
         // Dibuixa el rectangle
         Gizmos.DrawWireCube(pos, size);
     }
-
 }

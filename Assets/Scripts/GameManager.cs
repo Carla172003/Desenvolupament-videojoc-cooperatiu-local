@@ -40,6 +40,12 @@ public class GameManager : MonoBehaviour
     public int puntuacio = 0;
     public int numEstrelles = 0;
     private string nivellActual = ""; // Guarda el nom del nivell actual
+    
+    // Estratègies de validació
+    private List<IValidacioEstrategia> estrategiesValidacio;
+    
+    // Patró estat per gestionar estat de la partida
+    private EstatPartida estatActual;
     #endregion
 
     #region Inicialització Singleton
@@ -173,58 +179,54 @@ public class GameManager : MonoBehaviour
         puntuacio = 0;
         nivellActual = SceneManager.GetActiveScene().name;
         puntsColocacio = FindObjectsOfType<PuntColocacio>();
+        
+        // Inicialitzar estratègies de validació
+        InicialitzarEstrategiesValidacio();
+        
+        // Inicialitzar estat com a Jugant
+        CanviarEstat(new EstatJugant(this));
     }
 
     /// <summary>
-    /// Comprova si s'ha aconseguit la victòria verificant punts de col·locació i NPCs.
+    /// Inicialitza la llista d'estratègies de validació segons el patró Strategy.
+    /// Cada estratègia valida un tipus específic d'objectes (Attrezzo, Llums, Vestimenta).
+    /// </summary>
+    private void InicialitzarEstrategiesValidacio()
+    {
+        estrategiesValidacio = new List<IValidacioEstrategia>
+        {
+            new ValidacioAttrezzo(),
+            new ValidacioLlums(),
+            new ValidacioVestimenta()
+        };
+    }
+
+    /// <summary>
+    /// Comprova si s'ha aconseguit la victòria utilitzant les estratègies de validació.
+    /// Aplica el patró Strategy per validar els diferents tipus d'objectes.
     /// </summary>
     public void ComprovarVictoria()
     {
         if (finalitzada) return;
+        if (estatActual == null || !estatActual.PotComprovarVictoria()) return;
 
-        if (!ComprovarPuntsColocacio() || !ComprovarNPCsVestits())
+        // Validar amb totes les estratègies
+        foreach (IValidacioEstrategia estrategia in estrategiesValidacio)
         {
-            return;
-        }
-
-        FinalitzarAmbVictoria();
-    }
-
-    /// <summary>
-    /// Comprova que tots els punts de col·locació estiguin ocupats i amb el color correcte.
-    /// </summary>
-    private bool ComprovarPuntsColocacio()
-    {
-        foreach (PuntColocacio punt in puntsColocacio)
-        {
-            if (!punt.ocupat || !punt.ColorEsCorrecto())
+            if (!estrategia.Validar())
             {
-                return false;
+                return; // Si alguna validació falla, no hi ha victòria
             }
         }
-        return true;
+
+        // Si totes les validacions passen, victòria!
+        estatActual.FinalitzarAmbVictoria();
     }
 
     /// <summary>
-    /// Comprova que tots els NPCs estiguin vestits.
+    /// Processa la victòria. Cridat per EstatFinalitzada.
     /// </summary>
-    private bool ComprovarNPCsVestits()
-    {
-        ControladorNPC[] npcs = FindObjectsOfType<ControladorNPC>();
-        foreach (ControladorNPC npc in npcs)
-        {
-            if (!npc.estaVestit)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /// <summary>
-    /// Finalitza la partida amb victòria.
-    /// </summary>
-    private void FinalitzarAmbVictoria()
+    public void ProcessarVictoria()
     {
         finalitzada = true;
         controladorCrono.PararCrono();
@@ -249,6 +251,17 @@ public class GameManager : MonoBehaviour
     public void PerderPartida()
     {
         if (finalitzada) return;
+        if (estatActual != null)
+        {
+            estatActual.FinalitzarAmbDerrota();
+        }
+    }
+
+    /// <summary>
+    /// Processa la derrota. Cridat per EstatFinalitzada.
+    /// </summary>
+    public void ProcessarDerrota()
+    {
         finalitzada = true;
         
         // Guardar la puntuació actual del ControladorPuntuacio al GameManager
@@ -267,6 +280,32 @@ public class GameManager : MonoBehaviour
     public int GetPuntuacio()
     {
         return puntuacio;
+    }
+
+    /// <summary>
+    /// Canvia l'estat actual de la partida.
+    /// </summary>
+    public void CanviarEstat(EstatPartida nouEstat)
+    {
+        estatActual?.OnExit();
+        estatActual = nouEstat;
+        estatActual?.OnEnter();
+    }
+
+    /// <summary>
+    /// Pausa la partida.
+    /// </summary>
+    public void Pausar()
+    {
+        estatActual?.Pausar();
+    }
+
+    /// <summary>
+    /// Reprèn la partida.
+    /// </summary>
+    public void Reprendre()
+    {
+        estatActual?.Reprendre();
     }
     #endregion
 
