@@ -7,11 +7,12 @@
 ## Índex
 1. [Descripció del Projecte](#descripció-del-projecte)
 2. [Arquitectura](#arquitectura)
-3. [Navegació d'Interfícies](#navegació-dinterfícies)
-4. [Scripts Controladors](#scripts-controladors)
-5. [Elements d'Art i Reutilització](#elements-dart-i-reutilització)
-6. [Convencions de Codi](#convencions-de-codi)
-7. [Llibreries Utilitzades](#llibreries-utilitzades)
+3. [Patrons de Disseny](#patrons-de-disseny)
+4. [Navegació d'Interfícies](#navegació-dinterfícies)
+5. [Scripts Controladors](#scripts-controladors)
+6. [Elements d'Art i Reutilització](#elements-dart-i-reutilització)
+7. [Convencions de Codi](#convencions-de-codi)
+8. [Llibreries Utilitzades](#llibreries-utilitzades)
 
 ---
 
@@ -68,6 +69,137 @@ Capa de persistència no implementada.
 
 ---
 
+## Patrons de Disseny
+
+El projecte implementa diversos patrons de disseny per facilitar el manteniment, extensibilitat i separació de responsabilitats.
+
+### 1. Patró State (Estat)
+
+#### Estat del Jugador
+**Propòsit**: Gestionar els diferents estats de moviment del jugador (caminar, saltar, pujar escales).
+
+**Implementació**:
+```
+EstatJugador (Abstract Base)
+├─→ EstatCaminant: Moviment horitzontal a terra
+├─→ EstatSaltant: Moviment aeri (salt/caiguda)
+└─→ EstatPujantBaixantEscales: Moviment vertical en escales
+```
+
+**Avantatges**:
+- Cada estat gestiona la seva pròpia lògica (input, física, transicions)
+- Facilita afegir nous estats sense modificar MovimentsJugadors
+- Separació clara entre comportaments (salt vs caiguda amb `aplicarForcaSalt`)
+
+**Classes clau**:
+- `EstatJugador.cs`: Classe base abstracta amb `ProcessarInput()`, `ActualitzarFisica()`, `ComprovarTransicions()`
+- `EstatCaminant.cs`: Gestiona moviment horitzontal i detecció de caigudes/salts
+- `EstatSaltant.cs`: Controla moviment aeri, permet enganxar-se a escales en mig del salt
+- `EstatPujantBaixantEscales.cs`: Gestió de moviment vertical, bloqueja si jugador porta objecte
+
+#### Estat de la Partida
+**Propòsit**: Gestionar els estats globals del joc (jugant, pausada, finalitzada).
+
+**Implementació**:
+```
+EstatPartida (Abstract Base)
+├─→ EstatJugant: Partida en curs (Time.timeScale = 1)
+├─→ EstatPausada: Joc pausat (Time.timeScale = 0)
+└─→ EstatFinalitzada: Victòria o derrota
+```
+
+**Avantatges**:
+- Centralitza la gestió de `Time.timeScale`
+- Evita comprovacions booleanes disperses pel codi
+- Només permet comprovar victòria en estat Jugant
+
+**Classes clau**:
+- `EstatPartida.cs`: Classe base amb mètodes `Pausar()`, `Reprendre()`, `FinalitzarAmbVictoria()`, `FinalitzarAmbDerrota()`
+- `GameManager.cs`: Manté `estatActual` i delega operacions als estats
+- `ControladorPausa.cs`: Crida `GameManager.Instance.Pausar()/Reprendre()`
+
+### 2. Patró Strategy (Estratègia)
+
+#### Validació d'Escena
+**Propòsit**: Permetre diferents estratègies de validació de victòria segons el tipus d'objectes.
+
+**Implementació**:
+```
+IValidacioEstrategia (Interface)
+├─→ ValidacioAttrezzo: Valida objectes sense focus
+├─→ ValidacioLlums: Valida focus amb color correcte
+└─→ ValidacioVestimenta: Valida que NPCs estan vestits
+```
+
+**Avantatges**:
+- Facilita afegir noves regles de victòria sense modificar GameManager
+- Cada estratègia té responsabilitat única i clara
+- Permet combinar múltiples validacions
+
+**Ús a GameManager.cs**:
+```csharp
+foreach (IValidacioEstrategia estrategia in estrategiesValidacio)
+{
+    if (!estrategia.Validar()) return; // Victòria falla
+}
+// Totes les validacions passen → Victòria!
+```
+
+#### Sistema de Puntuació amb 3 Estrelles
+**Propòsit**: Permetre diferents algoritmes de càlcul d'estrelles.
+
+**Implementació**:
+```
+ISistemaPuntuacio (Interface)
+└─→ Puntuacio3Estrelles: Calcula 0-3 estrelles segons llindars
+```
+
+**Avantatges**:
+- Facilita implementar nous sistemes de càlcul (percentatges, objectius específics, etc.)
+- Separa lògica de càlcul d'estrelles del controlador de puntuació
+- Configuració independent de llindars per estratègia
+
+**Ús a ControladorPuntuacio.cs**:
+```csharp
+estrategiaEstrelles = new Puntuacio3Estrelles(9600, 12600);
+numEstrelles = estrategiaEstrelles.CalcularEstrelles(puntuacioFinal, true);
+```
+
+### 3. Patró Observer (Observador)
+
+#### Sistema de Puntuació Reactiu
+**Propòsit**: Desacoblar el model de puntuació de la UI, actualitzant automàticament la interfície quan canvia la puntuació.
+
+**Implementació**:
+```
+ModelPuntuacio (Subject)
+    ├─→ SubscriureObservador()
+    ├─→ DesubscriureObservador()
+    └─→ NotificarObservadors()
+         ↓
+IObservadorPuntuacio (Observer Interface)
+    └─→ ActualitzarPuntuacio()
+         ↑
+ControladorPuntuacio (Concrete Observer)
+```
+
+**Avantatges**:
+- La UI s'actualitza automàticament quan canvia la puntuació
+- Separació clara entre lògica de domini (ModelPuntuacio) i presentació (ControladorPuntuacio)
+- Permet afegir múltiples observadors (UI, logs, estadístiques) sense modificar el model
+
+**Flux d'execució**:
+1. `ModelPuntuacio.SumarPunts()` → modifica puntuació interna
+2. `NotificarObservadors()` → crida `ActualitzarPuntuacio()` de tots els observadors
+3. `ControladorPuntuacio.ActualitzarPuntuacio()` → actualitza `puntuacioUI.text`
+
+**Classes clau**:
+- `IObservadorPuntuacio.cs`: Interfície amb `ActualitzarPuntuacio(int novaPuntuacio)`
+- `ModelPuntuacio.cs`: Model de domini que gestiona puntuació i notifica canvis
+- `ControladorPuntuacio.cs`: Implementa IObservadorPuntuacio, subscriu-se al model
+
+---
+
 ## Navegació d'Interfícies
 
 ### Flux de Navegació
@@ -106,29 +238,40 @@ Menu Principal
 ## Scripts Controladors
 
 ### GameManager.cs
-**Responsabilitat**: Gestor principal del joc amb patró Singleton.
+**Responsabilitat**: Gestor principal del joc amb patró Singleton i patró State per gestionar estats de la partida.
 
 - Persisteix entre escenes amb `DontDestroyOnLoad`
 - Gestiona transicions d'escenes amb fade
-- Comprova condicions de victòria (tots els objectes col·locats + colors correctes)
+- Utilitza **patró State** per gestionar estat de la partida (Jugant/Pausada/Finalitzada)
+- Utilitza **patró Strategy** per validar condicions de victòria amb múltiples estratègies
 - Calcula puntuació final i estrelles
 - Inicialitza nivells
 
-**Mètodes clau**: `ComprovarVictoria()`, `FinalitzarAmbVictoria()`, `PerderPartida()`, `InicialitzarNivell()`
+**Mètodes clau**: 
+- `ComprovarVictoria()`: Valida amb totes les estratègies (ValidacioAttrezzo, ValidacioLlums, ValidacioVestimenta)
+- `CanviarEstat()`: Gestiona transicions d'estat amb OnEnter/OnExit
+- `Pausar()/Reprendre()`: Delega al estatActual
+- `ProcessarVictoria()/ProcessarDerrota()`: Cridats per EstatFinalitzada
+- `InicialitzarNivell()`: Inicialitza estat a EstatJugant
 
 ### ControladorObjecte.cs
 **Responsabilitat**: Gestió de col·locació d'objectes amb sistema de dependències.
 
 - Valida dependències abans de permetre col·locació
 - Reprodueix so d'error si falta dependència
-- Assigna `sortingOrder = 10` per objectes dependents, `0` per objectes base
-- Suma punts i crida `ComprovarVictoria()` després de col·locar
+- Assigna `sortingOrder = 10` per objecteamb patró Observer per actualitzar UI automàticament i patró Strategy per càlcul d'estrelles.
 
-**Camps clau**: `idObjecte`, `idObjecteDependencia`, `snapDistance`, `soError`
+- Implementa **IObservadorPuntuacio** per rebre notificacions de canvis de puntuació
+- Utilitza **ModelPuntuacio** (Subject) per gestionar la lògica de domini
+- Utilitza **patró Strategy** amb ISistemaPuntuacio per càlcul d'estrelles flexible
+- UI s'actualitza automàticament quan ModelPuntuacio notifica canvis
+- Reset selectiu: només reinicia en escenes que comencen amb "Nivell"
 
-### ControladorPuntuacio.cs
-**Responsabilitat**: Gestió de puntuació i càlcul d'estrelles.
-
+**Mètodes clau**: 
+- `ActualitzarPuntuacio(int novaPuntuacio)`: Observer, actualitza UI automàticament
+- `SumarPunts(int punts)`: Delega a ModelPuntuacio, que notifica canvis
+- `CalcularEstrelles()`: Utilitza estratègia Puntuacio3Estrelles
+- `CanviarEstrategiaEstrelles()`: Permet canviar algoritme de càlcul en temps d'execució
 - Acumula punts durant la partida (100 pts per objecte)
 - Calcula puntuació final amb bonus de temps (`temps * 100`)
 - Determina estrelles segons llindars configurables
@@ -142,13 +285,20 @@ Menu Principal
 - Utilitza `Dictionary<string, int>` per puntuacions i estrelles
 - NO usa PlayerPrefs (dades es perden en tancar app)
 - Només guarda si la nova puntuació supera l'anterior
-- Persisteix amb `DontDestroyOnLoad(transform.root.gameObject)`
+- Persisteix amb `DontDestroyOnLoad(transform.root.gameObject)` amb patró State.
 
-**Mètodes clau**: `GuardarDadesNivell()`, `ObtenirPuntuacioMaxima()`, `ObtenirEstrellesMaximes()`
+- Utilitza **patró State** per gestionar comportaments de moviment (Caminant/Saltant/PujantEscales)
+- Delega processat d'input i física a `estatActual`
+- Detecta input segons tag (`Jugador1`: A/D/W/S/E, `Jugador2`: Fletxes/RightShift)
+- Estats gestionen transicions automàticament (caiguda, salt, escales)
+- Comprova si està a terra amb `Physics2D.OverlapBoxAll()`
+- Bloqueja pujada d'escales si aguanta objecte
+- Actualitza paràmetres d'Animator: `Horizontal`, `VelocitatY`, `estaAterra`, `estaEscales`, `teObjecte`
 
-### MovimentsJugadors.cs
-**Responsabilitat**: Control de moviment i animació dels jugadors.
-
+**Estats disponibles**:
+- `EstatCaminant`: Moviment horitzontal a terra, detecta inici de salt o caiguda
+- `EstatSaltant`: Moviment aeri, permet enganxar-se a escales en mig del salt
+- `EstatPujantBaixantEscales`: Moviment vertical, bloquejat si porta objecte
 - Detecta input segons tag (`Jugador1`: A/D/W/S/E, `Jugador2`: Fletxes/RightShift)
 - Gestiona moviment horitzontal, salt i pujada d'escales
 - Comprova si està a terra amb `Physics2D.OverlapBoxAll()`
@@ -220,13 +370,16 @@ Menu Principal
 - `ComprovarVictoria()` després de cada canvi
 
 **Camps clau**: `spotlight`, `colorsDisponibles[]`, `colorAsignat`
+ amb integració al patró State de GameManager.
 
-### GestorPausa.cs
-**Responsabilitat**: Detecció de tecla Escape per pausar el joc.
+- Activa/desactiva panell de pausa
+- Delega gestió d'estat a `GameManager.Instance.Pausar()/Reprendre()`
+- GameManager gestiona `Time.timeScale` a través del patró State
+- Botons: Reprendre, Tornar al Menu, Sortir
 
-- GameObject sempre actiu que detecta `Input.GetKeyDown(KeyCode.Escape)`
-- Verifica que `ControladorPanellsInfo.panells` no estigui actiu (bloqueig)
-- Troba `ControladorPausa` i crida `PausarJoc()` / `ReprendreJoc()`
+**Mètodes clau**: 
+- `PausarJoc()`: Crida `GameManager.Pausar()` (canvia a EstatPausada)
+- `ReprendreJoc()`: Crida `GameManager.Reprendre()` (torna a EstatJugant)/ `ReprendreJoc()`
 - Ha d'estar en GameObject root de l'escena
 
 **Important**: No es desactiva mai, controla pausa global.
@@ -424,22 +577,39 @@ using System.Collections.Generic;  // Dictionary, HashSet
 ```
 
 ### Requisits del Sistema
-
-- **Unity**: 2022.3.32f1 LTS
-- **Versió .NET**: .NET Standard 2.1
-- **Plataforma**: Windows, macOS, Linux
-- **Resolució recomanada**: 1920x1080
-
-### Dependències de Scripts
-
-```
-GameManager
+EstatPartida (State)
+│   ├─→ EstatJugant
+│   ├─→ EstatPausada
+│   └─→ EstatFinalitzada
+├─→ IValidacioEstrategia (Strategy)
+│   ├─→ ValidacioAttrezzo
+│   ├─→ ValidacioLlums
+│   └─→ ValidacioVestimenta
 ├─→ ControladorPuntuacio
 ├─→ ControladorCrono
-├─→ GestorDadesNivells
-└─→ ControladorObjecte (static)
+└─→ GestorDadesNivells
+
+ControladorPuntuacio (Observer)
+├─→ ModelPuntuacio (Subject)
+├─→ IObservadorPuntuacio (Interface)
+└─→ ISistemaPuntuacio (Strategy)
+    └─→ Puntuacio3Estrelles
+
+MovimentsJugadors
+├─→ EstatJugador (State)
+│   ├─→ EstatCaminant
+│   ├─→ EstatSaltant
+│   └─→ EstatPujantBaixantEscales
+└─→ AgafarObjecte
+    └─→ ControladorObjecte
 
 ControladorObjecte
+├─→ PuntColocacio
+├─→ ControladorFocus
+└─→ GameManager
+
+ZonaObjectes
+roladorObjecte
 ├─→ PuntColocacio
 ├─→ ControladorFocus
 └─→ GameManager
