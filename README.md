@@ -47,6 +47,7 @@ Pots descarregar els executables del joc per jugar sense necessitat d'instal·la
 **Requisits**:
 - macOS 10.13 o superior
 - Descomprimeix el fitxer .zip i obre `BreakALeg-Mac-v1.0.0.app`
+- Si macOS bloqueja l'aplicació: Preferències del Sistema > Seguretat i Privacitat > Obre igualment
 
 ---
 
