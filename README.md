@@ -35,14 +35,14 @@
 Pots descarregar els executables del joc per jugar sense necessitat d'instal·lar Unity:
 
 ### Windows
-📥 [Descarregar per a Windows](https://github.com/carlalopez16/Videojoc2D/releases/download/v1.0/BreakALeg_Windows.zip)
+📥 [Descarregar per a Windows](https://github.com/Carla172003/Desenvolupament-videojoc-cooperatiu-local/releases/tag/v1.0.0)
 
 **Requisits**:
 - Windows 10 o superior
 - Descomprimeix el fitxer .zip i executa `BreakALeg-Windows-v1.0.0.exe`
 
 ### macOS
-📥 [Descarregar per a macOS](https://github.com/carlalopez16/Videojoc2D/releases/download/v1.0/BreakALeg_Mac.zip)
+📥 [Descarregar per a macOS](https://github.com/Carla172003/Desenvolupament-videojoc-cooperatiu-local/releases/tag/v1.0.0)
 
 **Requisits**:
 - macOS 10.13 o superior
