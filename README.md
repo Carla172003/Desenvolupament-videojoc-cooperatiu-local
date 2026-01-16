@@ -6,13 +6,14 @@
 
 ## Índex
 1. [Descripció del Projecte](#descripció-del-projecte)
-2. [Arquitectura](#arquitectura)
-3. [Patrons de Disseny](#patrons-de-disseny)
-4. [Navegació d'Interfícies](#navegació-dinterfícies)
-5. [Scripts Controladors](#scripts-controladors)
-6. [Elements d'Art i Reutilització](#elements-dart-i-reutilització)
-7. [Convencions de Codi](#convencions-de-codi)
-8. [Llibreries Utilitzades](#llibreries-utilitzades)
+2. [Descarregar i Jugar](#descarregar-i-jugar)
+3. [Arquitectura](#arquitectura)
+4. [Patrons de Disseny](#patrons-de-disseny)
+5. [Navegació d'Interfícies](#navegació-dinterfícies)
+6. [Scripts Controladors](#scripts-controladors)
+7. [Elements d'Art i Reutilització](#elements-dart-i-reutilització)
+8. [Convencions de Codi](#convencions-de-codi)
+9. [Llibreries Utilitzades](#llibreries-utilitzades)
 
 ---
 
@@ -26,6 +27,26 @@
 - Puzzles amb dependències entre objectes i armaris bloquejats amb claus
 - Sistema de puntuació basat en objectes col·locats i temps restant
 - Multiidioma: Català, Espanyol, Anglès
+
+---
+
+## Descarregar i Jugar
+
+Pots descarregar els executables del joc per jugar sense necessitat d'instal·lar Unity:
+
+### Windows
+📥 [Descarregar per a Windows](https://github.com/carlalopez16/Videojoc2D/releases/download/v1.0/BreakALeg_Windows.zip)
+
+**Requisits**:
+- Windows 10 o superior
+- Descomprimeix el fitxer .zip i executa `BreakALeg-Windows-v1.0.0.exe`
+
+### macOS
+📥 [Descarregar per a macOS](https://github.com/carlalopez16/Videojoc2D/releases/download/v1.0/BreakALeg_Mac.zip)
+
+**Requisits**:
+- macOS 10.13 o superior
+- Descomprimeix el fitxer .zip i obre `BreakALeg-Mac-v1.0.0.app`
 
 ---
 
