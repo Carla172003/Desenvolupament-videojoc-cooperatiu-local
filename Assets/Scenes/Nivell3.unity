@@ -11262,7 +11262,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1252504779}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 9e45453c9d7974e0da8548771dfb34e2, type: 2}
+  m_Material: {fileID: 6200000, guid: 0ea631c2da2084cacb39f19cd9528272, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -11332,6 +11332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   socJugador1: 0
+  movimentHorizontal: 0
   velocitatMoviment: 400
   suavitzat: 0
   forcaSalt: 400
@@ -11340,9 +11341,7 @@ MonoBehaviour:
     m_Bits: 64
   controladorTerra: {fileID: 2082008988}
   midaCaixaControlador: {x: 0.9, y: 0.25, z: 0}
-  estaAterra: 0
   velocitatEscales: 8
-  centreEscales: {fileID: 0}
 --- !u!4 &1252736966 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8554970600691954417, guid: a2265fbd5050b4bfdb782dc20349b329, type: 3}
@@ -17357,7 +17356,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1998235732}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 9e45453c9d7974e0da8548771dfb34e2, type: 2}
+  m_Material: {fileID: 6200000, guid: 0ea631c2da2084cacb39f19cd9528272, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -17427,6 +17426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   socJugador1: 0
+  movimentHorizontal: 0
   velocitatMoviment: 400
   suavitzat: 0
   forcaSalt: 400
@@ -17435,9 +17435,7 @@ MonoBehaviour:
     m_Bits: 320
   controladorTerra: {fileID: 694795824}
   midaCaixaControlador: {x: 0.7, y: 0.25, z: 0}
-  estaAterra: 0
   velocitatEscales: 8
-  centreEscales: {fileID: 0}
 --- !u!1 &2029850494
 GameObject:
   m_ObjectHideFlags: 0
