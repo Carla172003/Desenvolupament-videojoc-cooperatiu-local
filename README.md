@@ -597,53 +597,6 @@ using UnityEngine.Rendering.Universal;  // Light2D
 using TMPro;  // TextMeshProUGUI
 using System.Collections.Generic;  // Dictionary, HashSet
 ```
-
-### Requisits del Sistema
-EstatPartida (State)
-│   ├─→ EstatJugant
-│   ├─→ EstatPausada
-│   └─→ EstatFinalitzada
-├─→ IValidacioEstrategia (Strategy)
-│   ├─→ ValidacioAttrezzo
-│   ├─→ ValidacioLlums
-│   └─→ ValidacioVestimenta
-├─→ ControladorPuntuacio
-├─→ ControladorCrono
-└─→ GestorDadesNivells
-
-ControladorPuntuacio (Observer)
-├─→ ModelPuntuacio (Subject)
-├─→ IObservadorPuntuacio (Interface)
-└─→ ISistemaPuntuacio (Strategy)
-    └─→ Puntuacio3Estrelles
-
-MovimentsJugadors
-├─→ EstatJugador (State)
-│   ├─→ EstatCaminant
-│   ├─→ EstatSaltant
-│   └─→ EstatPujantBaixantEscales
-└─→ AgafarObjecte
-    └─→ ControladorObjecte
-
-ControladorObjecte
-├─→ PuntColocacio
-├─→ ControladorFocus
-└─→ GameManager
-
-ZonaObjectes
-roladorObjecte
-├─→ PuntColocacio
-├─→ ControladorFocus
-└─→ GameManager
-
-ZonaObjectes
-└─→ ControladorObjecte
-
-MovimentsJugadors
-└─→ AgafarObjecte
-    └─→ ControladorObjecte
-```
-
 ---
 
 **Versió del Joc**: 1.0  
